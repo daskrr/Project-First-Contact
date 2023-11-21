@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="video">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/main/java/META-INF/libs/video/gst1-java-core-1.4.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/java/META-INF/libs/video/jna.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/java/META-INF/libs/video/video.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

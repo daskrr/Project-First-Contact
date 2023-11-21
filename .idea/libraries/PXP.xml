@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="PXP">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/main/java/META-INF/libs/PXP.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
