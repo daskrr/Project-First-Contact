@@ -21,29 +21,54 @@ import pxp.engine.data.ui.RenderMode;
 public class Exit extends GameObject
 {
     private static class ExitHandler extends Component {
+        private final GameObject exitButton;
         private final Image renderer;
-        public ExitHandler(Image renderer) {
-             this.renderer = renderer;
+        public ExitHandler(GameObject exitButton, Image renderer) {
+            this.exitButton = exitButton;
+            this.renderer = renderer;
         }
 
         @Override
         public void triggerEnter(Collider col) {
             if (!col.gameObject.name.equals("levelPlayerTrigger")) return;
 
-            renderer.color.setA(0);
+            renderer.color.setA(255);
+            this.exitButton.isActive = true;
         }
 
         @Override
         public void triggerExit(Collider col) {
             if (!col.gameObject.name.equals("levelPlayerTrigger")) return;
 
-            renderer.color.setA(255);
+            renderer.color.setA(0);
+            this.exitButton.isActive = false;
         }
     }
 
-    public Exit() {
+    public Exit(Vector2 position) {
         super("exitWrapper");
 
+        Image image = new Image(AssetManager.get("exit", SpriteAsset.class)) {{
+            color.setA(0);
+        }};
+        GameObject exitButton = createButton(image);
+
+        this.setComponents(new Component[] {
+            new Canvas(RenderMode.WORLD),
+            new ExitHandler(exitButton, image),
+            new BoxCollider(new Vector2(), new Vector2(1.5f, 8f)) {{
+                trigger = true;
+            }}
+        });
+
+        this.setChildren(new GameObject[] {
+            exitButton
+        });
+
+        this.transform.position = position;
+    }
+
+    private GameObject createButton(Image image) {
         PXPSingleEvent<MouseEvent> onClickEvent = new PXPSingleEvent<>() {
             @Override
             public void invoke(MouseEvent mouseEvent) {
@@ -52,21 +77,10 @@ public class Exit extends GameObject
             }
         };
 
-        Image image = new Image(AssetManager.get("exit", SpriteAsset.class));
-
-        this.setComponents(new Component[] {
-            new Canvas(RenderMode.WORLD)
-        });
-
-        this.setChildren(new GameObject[] {
-            new GameObject("exitButton", new Component[] {
+        return new GameObject("exitButton", new Component[] {
                 new Button(InteractableTransition.COLOR) {{
                     targetImage = image;
                     onClick = onClickEvent;
-                }},
-                new ExitHandler(image),
-                new BoxCollider(new Vector2(), new Vector2(.5f, .5f)) {{
-                    trigger = true;
                 }}
             }, new GameObject[] {
                 new GameObject("exitImage", new Component[] { image }) {{
@@ -84,7 +98,7 @@ public class Exit extends GameObject
                     new Vector2(1,1),
                     new Vector2(1f, 1f)
                 );
-            }}
-        });
+                isActive = false;
+            }};
     }
 }
