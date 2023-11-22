@@ -1,12 +1,16 @@
 package puntozero.liftoff.components;
 
+import pxp.engine.core.GameObject;
 import pxp.engine.core.Time;
+import pxp.engine.core.Transform;
 import pxp.engine.core.component.Animator;
 import pxp.engine.core.component.Component;
 import pxp.engine.core.component.SpriteRenderer;
 import pxp.engine.data.Input;
 import pxp.engine.data.MouseButton;
 import pxp.engine.data.Vector2;
+import pxp.engine.data.assets.AssetManager;
+import pxp.engine.data.assets.SpriteAsset;
 import pxp.engine.data.collision.Collision;
 import pxp.logging.Debug;
 import pxp.util.Mathf;
@@ -42,9 +46,10 @@ public class MapPlayerController extends Component
     public void update() {
         if (Input.getMouseButtonClick(MouseButton.MB1)) {
             Vector2 goTo = ctx().getCurrentScene().getCamera().screenToWorldPosition(Input.getMousePos());
+            this.createClick(goTo.clone());
             goTo.y -= .9f;
 
-            this.destination = goTo;
+            this.destination = goTo.clone();
             this.calcDirection();
         }
 
@@ -122,5 +127,17 @@ public class MapPlayerController extends Component
                 renderer.flipX = true;
             }
         }
+    }
+
+    public void createClick(Vector2 position) {
+//        GameObject click = new GameObject("click", new Component[] {
+//            new SpriteRenderer(AssetManager.get("circle", SpriteAsset.class)),
+//        }) {{
+//            transform = new Transform(position);
+//        }};
+//
+//        instantiate(click);
+//
+//        ctx().runLater(this.gameObject, .3f, click::destroy);
     }
 }

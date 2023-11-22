@@ -1,5 +1,6 @@
 package puntozero.liftoff;
 
+import puntozero.liftoff.scenes.KitchenScene;
 import puntozero.liftoff.scenes.MapScene;
 import pxp.engine.core.Game;
 import pxp.engine.core.Scene;
@@ -20,13 +21,16 @@ public class Liftoff extends Game
         AssetManager.createSpriteSheet("mapPlayer", "map_player.png", 16, 10, 6);
         AssetManager.createSprite("map", "map.png", 16);
         AssetManager.createSprite("fill", "fill.png", 1);
+        AssetManager.createSprite("kitchenBackground", "kitchen/background.png", 16);
+        AssetManager.createSprite("exit", "exit.png", 16);
+        AssetManager.createSprite("circle", "circle.png", 1000);
         // the asset path doesn't need to contain 'data/', but the
         // asset needs to be placed in a data directory
 
         // needs to return the game settings
         return new GameSettings() {{
-            size = new Vector2(1920,1080);
-            fullscreen = true;
+            size = new Vector2(1280,720);
+//            fullscreen = true;
 
             targetFPS = 140;
             background = new Color(0,0,0,255);
@@ -65,7 +69,8 @@ public class Liftoff extends Game
         // so, the suggested method is creating scenes individually as super classes,
         // then instantiating them here.
         return new Scene[] {
-            new MapScene(),
+//            new MapScene(),
+            new KitchenScene(),
         };
     }
 

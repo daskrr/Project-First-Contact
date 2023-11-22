@@ -2,6 +2,7 @@ package puntozero.liftoff.scenes;
 
 import processing.event.MouseEvent;
 import puntozero.liftoff.components.MapPlayerController;
+import puntozero.liftoff.data.SceneIndex;
 import puntozero.liftoff.prefabs.Door;
 import puntozero.liftoff.prefabs.MapPlayer;
 import pxp.engine.core.GameObject;
@@ -68,7 +69,7 @@ public class MapScene extends Scene
             () -> new Door(0, new Vector2(-5.1f, .95f), onClick),
 
             // middle top door
-            () -> new Door(0, new Vector2(-2.9f, -.95f), onClick),
+            () -> new Door(SceneIndex.KITCHEN.index, new Vector2(-2.9f, -.95f), onClick),
             // left top door
             () -> new Door(0, new Vector2(-6.8f, -.95f), onClick),
 
