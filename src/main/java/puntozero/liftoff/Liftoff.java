@@ -1,6 +1,7 @@
 package puntozero.liftoff;
 
 import puntozero.liftoff.scenes.KitchenScene;
+import puntozero.liftoff.scenes.LevelTestScene;
 import puntozero.liftoff.scenes.MapScene;
 import pxp.engine.core.Game;
 import pxp.engine.core.Scene;
@@ -21,9 +22,15 @@ public class Liftoff extends Game
         AssetManager.createSpriteSheet("mapPlayer", "map_player.png", 16, 10, 6);
         AssetManager.createSprite("map", "map.png", 16);
         AssetManager.createSprite("fill", "fill.png", 1);
-        AssetManager.createSprite("kitchenBackground", "kitchen/background.png", 16);
         AssetManager.createSprite("exit", "exit.png", 16);
         AssetManager.createSprite("circle", "circle.png", 1000);
+
+        AssetManager.createSprite("kitchenBackground", "kitchen/background.png", 16);
+        AssetManager.createSprite("doorLeft", "kitchen/door_left.png", 16);
+        AssetManager.createSprite("doorRight", "kitchen/door_right.png", 16);
+
+        AssetManager.createSpriteSheet("levelPlayer", "level_player.png", 16, 6, 15);
+
         // the asset path doesn't need to contain 'data/', but the
         // asset needs to be placed in a data directory
 
@@ -71,6 +78,7 @@ public class Liftoff extends Game
         return new Scene[] {
 //            new MapScene(),
             new KitchenScene(),
+//                new LevelTestScene()
         };
     }
 

@@ -30,7 +30,7 @@ public class Exit extends GameObject
 
         @Override
         public void triggerEnter(Collider col) {
-            if (!col.gameObject.name.equals("levelPlayerTrigger")) return;
+            if (!col.gameObject.name.equals("levelPlayer")) return;
 
             renderer.color.setA(255);
             this.exitButton.isActive = true;
@@ -38,7 +38,7 @@ public class Exit extends GameObject
 
         @Override
         public void triggerExit(Collider col) {
-            if (!col.gameObject.name.equals("levelPlayerTrigger")) return;
+            if (!col.gameObject.name.equals("levelPlayer")) return;
 
             renderer.color.setA(0);
             this.exitButton.isActive = false;
