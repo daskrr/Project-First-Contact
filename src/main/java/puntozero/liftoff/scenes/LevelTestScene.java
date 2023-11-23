@@ -25,8 +25,8 @@ public class LevelTestScene extends Scene
     public LevelTestScene() {
         super();
 
-        AssetManager.createSprite("kitchenBackground", "data/MINI_map.png", 16);
-        AssetManager.createSpriteSheet("arrow", "data/IconsFlat-16.png", 16, 10, 10);
+//        AssetManager.createSprite("kitchenBackground", "data/MINI_map.png", 16);
+
 
         GameObjectSupplier[] suppliers = new GameObjectSupplier[] {
             () -> new GameObject("camera", new Component[]{

@@ -1,5 +1,6 @@
 package puntozero.liftoff.components;
 
+import puntozero.liftoff.manager.SceneStateManager;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.Time;
 import pxp.engine.core.Transform;
@@ -40,6 +41,10 @@ public class MapPlayerController extends Component
     public void start() {
         this.renderer = getComponentOfType(SpriteRenderer.class);
         this.animator = getComponentOfType(Animator.class);
+
+        Vector2 position = SceneStateManager.getInstance().mapPlayerPosition;
+        if (position != null)
+            transform().position = position.clone();
     }
 
     @Override
