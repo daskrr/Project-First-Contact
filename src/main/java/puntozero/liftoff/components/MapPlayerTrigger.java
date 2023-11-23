@@ -1,5 +1,6 @@
 package puntozero.liftoff.components;
 
+import puntozero.liftoff.manager.SceneStateManager;
 import pxp.engine.core.component.Collider;
 import pxp.engine.core.component.Component;
 
@@ -19,8 +20,10 @@ public class MapPlayerTrigger extends Component
         this.controller.isNearDoor = true;
         this.controller.doorIndex = door.index;
 
-        if (this.controller.goThroughDoor)
+        if (this.controller.goThroughDoor) {
+            SceneStateManager.getInstance().mapPlayerPosition = controller.transform().position;
             ctx().setScene(controller.doorIndex);
+        }
     }
 
     @Override

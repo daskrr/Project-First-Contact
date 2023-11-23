@@ -17,6 +17,7 @@ import pxp.engine.data.assets.SpriteAsset;
 import pxp.engine.data.event.PXPSingleEvent;
 import pxp.engine.data.ui.InteractableTransition;
 import pxp.engine.data.ui.RenderMode;
+import pxp.logging.Debug;
 
 public class Exit extends GameObject
 {
@@ -72,8 +73,8 @@ public class Exit extends GameObject
         PXPSingleEvent<MouseEvent> onClickEvent = new PXPSingleEvent<>() {
             @Override
             public void invoke(MouseEvent mouseEvent) {
-                // change scene
-                scene.context.setScene(SceneIndex.MAP.index);
+            // change scene
+            scene.context.setScene(SceneIndex.MAP.index);
             }
         };
 

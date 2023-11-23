@@ -26,12 +26,25 @@ public class Interactable extends GameObject
     private boolean canInteract = false;
 
     private class InteractableHandler extends Component {
+
+        private boolean interacted = false;
         @Override
         public void triggerEnter(Collider collider) {
             if (!canInteract) return;
             if (!collider.gameObject.name.equals("levelPlayer")) return;
 
             onInteract.invoke();
+        }
+        @Override
+        public void triggerStay(Collider collider) {
+            // in case the player is already in the area of the interactable, but didn't click on it
+            if (interacted) return;
+            if (!canInteract) return;
+            if (!collider.gameObject.name.equals("levelPlayer")) return;
+
+            onInteract.invoke();
+
+            interacted = true;
         }
         @Override
         public void triggerExit(Collider collider) {

@@ -3,6 +3,7 @@ package puntozero.liftoff.scenes;
 import processing.event.MouseEvent;
 import puntozero.liftoff.components.MapPlayerController;
 import puntozero.liftoff.data.SceneIndex;
+import puntozero.liftoff.manager.SceneStateManager;
 import puntozero.liftoff.prefabs.Door;
 import puntozero.liftoff.prefabs.MapPlayer;
 import pxp.engine.core.GameObject;
@@ -33,8 +34,10 @@ public class MapScene extends Scene
                 mapPlayer.controller.goThroughDoor = true;
 
                 // if the player is already near a door, go through it
-                if (mapPlayer.controller.isNearDoor)
+                if (mapPlayer.controller.isNearDoor) {
+                    SceneStateManager.getInstance().mapPlayerPosition = mapPlayer.transform.position;
                     context.setScene(mapPlayer.controller.doorIndex);
+                }
             }
         };
 
