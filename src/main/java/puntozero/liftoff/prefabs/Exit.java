@@ -2,6 +2,7 @@ package puntozero.liftoff.prefabs;
 
 import processing.event.MouseEvent;
 import puntozero.liftoff.data.SceneIndex;
+import puntozero.liftoff.manager.SceneStateManager;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.RectTransform;
 import pxp.engine.core.component.BoxCollider;
@@ -73,6 +74,10 @@ public class Exit extends GameObject
         PXPSingleEvent<MouseEvent> onClickEvent = new PXPSingleEvent<>() {
             @Override
             public void invoke(MouseEvent mouseEvent) {
+            // save position
+            // TODO
+//            SceneStateManager.getInstance().levelPlayerPosition = getGameObject("levelPlayer").transform.position;
+
             // change scene
             scene.context.setScene(SceneIndex.MAP.index);
             }

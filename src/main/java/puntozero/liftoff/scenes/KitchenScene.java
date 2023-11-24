@@ -1,11 +1,11 @@
 package puntozero.liftoff.scenes;
 
+import puntozero.liftoff.components.PlayerInventory;
+import puntozero.liftoff.data.SceneIndex;
+import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
-import puntozero.liftoff.prefabs.Exit;
-import puntozero.liftoff.prefabs.Interactable;
-import puntozero.liftoff.prefabs.LevelPlayer;
-import puntozero.liftoff.prefabs.TextBox;
+import puntozero.liftoff.prefabs.*;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.Scene;
 import pxp.engine.core.Transform;
@@ -50,6 +50,7 @@ public class KitchenScene extends Scene
                 add(() -> new LevelPlayer() {{
                     transform = new Transform(new Vector2(13f, 5f));
                 }});
+                add(PlayerInventory::create);
             }};
 
             if (doorLeft)
@@ -74,7 +75,9 @@ public class KitchenScene extends Scene
                 suppliers.add(() -> new Interactable("drawerLeft",
                     new Vector2(0f, 2.5f),
                     new Vector2(2.4f, 4f),
-                    new Image(AssetManager.get("drawerLeft", SpriteAsset.class)),
+                    new Image(AssetManager.get("drawerLeft", SpriteAsset.class)) {{
+                        color = new Color(255,255,255, 0);
+                    }},
                     scene.openDrawer("drawerLeft"))
                 {{
                     transform = new Transform(new Vector2(-12.25f, 2.2f));
@@ -83,7 +86,9 @@ public class KitchenScene extends Scene
                 suppliers.add(() -> new Interactable("drawerRight",
                     new Vector2(0f, 2.5f),
                     new Vector2(3.2f, 4f),
-                    new Image(AssetManager.get("drawerRight", SpriteAsset.class)),
+                    new Image(AssetManager.get("drawerRight", SpriteAsset.class)) {{
+                        color = new Color(255,255,255, 0);
+                    }},
                     scene.openDrawer("drawerRight"))
                 {{
                     transform = new Transform(new Vector2(-6.3f, 2.2f));
@@ -93,11 +98,19 @@ public class KitchenScene extends Scene
                 suppliers.add(() -> new Interactable("minigameDoor",
                     new Vector2(0f, 0f),
                     new Vector2(2.4f, 2.4f),
-                    new Image(AssetManager.get("minigameDoor", SpriteAsset.class)),
+                    new Image(AssetManager.get("minigameDoor", SpriteAsset.class)) {{
+                        color = new Color(255,255,255, 0);
+                    }},
                     scene.openMinigame())
                 {{
                     transform = new Transform(new Vector2(-12.25f, 5f));
                 }});
+
+            suppliers.add(() -> new GameObject("light", new Component[] {
+                new SpriteRenderer(AssetManager.get("kitchenLight", SpriteAsset.class)) {{
+                    setSortingLayer("light");
+                }}
+            }));
 
             return suppliers.toArray(new GameObjectSupplier[0]);
         }
@@ -130,8 +143,12 @@ public class KitchenScene extends Scene
 
                 if (object.equals("doorLeft"))
                     state.doorLeft = false;
-                else
+                else {
                     state.doorRight = false;
+
+                    // show matches
+                    addGameObject(new Item(ItemRegistry.MATCHES, new Vector2(-4.8f, 5f)));
+                }
             }
         };
     }
@@ -139,16 +156,18 @@ public class KitchenScene extends Scene
         return new PXPEvent() {
             @Override
             public void invoke() {
-                // display message
-                addGameObject(new TextBox(
+                TextBox text = new TextBox(
                     "It's too heavy for you to open!",
                     17,
-                        new Vector2(600,200),
-                        new Color(30, 32, 36, 240),
-                        AssetManager.get("PressStart", FontAsset.class),
-                        Color.white()
-                    )
+                    new Vector2(600,200),
+                    new Color(30, 32, 36, 240),
+                    AssetManager.get("PressStart", FontAsset.class),
+                    Color.white()
                 );
+
+                // display message
+                addGameObject(text);
+                text.remove(5f);
                 getGameObject(object).destroy(); // destroy since we don't want to be able to interact again
 
                 LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
@@ -177,6 +196,7 @@ public class KitchenScene extends Scene
                 SceneStateManager.getInstance().levelPlayerPosition = levelPlayer.transform.position;
 
                 // change scene to minigame scene
+                context.setScene(SceneIndex.POTS.index);
             }
         };
     }

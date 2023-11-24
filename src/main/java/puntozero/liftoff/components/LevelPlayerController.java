@@ -8,6 +8,7 @@ import pxp.engine.core.component.SpriteRenderer;
 import pxp.engine.data.Input;
 import pxp.engine.data.MouseButton;
 import pxp.engine.data.Vector2;
+import pxp.logging.Debug;
 import pxp.util.Mathf;
 
 public class LevelPlayerController extends Component

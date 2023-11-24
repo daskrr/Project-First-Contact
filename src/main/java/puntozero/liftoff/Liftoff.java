@@ -3,7 +3,9 @@ package puntozero.liftoff;
 import puntozero.liftoff.manager.SceneStateManager;
 import puntozero.liftoff.scenes.KitchenScene;
 import puntozero.liftoff.scenes.LevelTestScene;
+import puntozero.liftoff.scenes.MainMenu;
 import puntozero.liftoff.scenes.MapScene;
+import puntozero.liftoff.scenes.minigame.PotsScene;
 import pxp.engine.core.Game;
 import pxp.engine.core.Scene;
 import pxp.engine.data.Color;
@@ -21,6 +23,8 @@ public class Liftoff extends Game
     public GameSettings startup() {
         // adding assets to the game
         AssetManager.createSprite("test", "image.png", 16);
+        AssetManager.createSprite("mainMenu", "mainMenu.png", 16);
+
         AssetManager.createSpriteSheet("mapPlayer", "map_player.png", 16, 10, 6);
         AssetManager.createSprite("map", "map.png", 16);
         AssetManager.createSprite("fill", "fill.png", 1);
@@ -29,11 +33,20 @@ public class Liftoff extends Game
         AssetManager.createSprite("circle", "circle.png", 1000);
 
         AssetManager.createSprite("kitchenBackground", "kitchen/background.png", 16);
+        AssetManager.createSprite("kitchenLight", "kitchen/light.png", 16);
         AssetManager.createSprite("doorLeft", "kitchen/door_left.png", 16);
         AssetManager.createSprite("doorRight", "kitchen/door_right.png", 16);
         AssetManager.createSprite("drawerRight", "kitchen/drawer_right.png", 16);
         AssetManager.createSprite("drawerLeft", "kitchen/drawer_left.png", 16);
         AssetManager.createSprite("minigameDoor", "kitchen/minigameDoor.png", 16);
+
+        AssetManager.createSprite("bigPot", "kitchen/big_pot.png", 16);
+        AssetManager.createSprite("mediumPot", "kitchen/medium_pot.png", 16);
+        AssetManager.createSprite("smallPot", "kitchen/small_pot.png", 16);
+        AssetManager.createSprite("extraSmallPot", "kitchen/extra_small_pot.png", 16);
+        AssetManager.createSprite("potSlot", "kitchen/pot_slot.png", 16);
+
+        AssetManager.createSprite("item_matchBox", "items/matchBox.png", 16);
 
         AssetManager.createSpriteSheet("levelPlayer", "level_player.png", 16, 6, 15);
         AssetManager.createFont("PressStart", new FontAsset("fonts/PressStart2P-Regular.ttf", null,null,null, 40, true));
@@ -57,8 +70,9 @@ public class Liftoff extends Game
             sortingLayers = new String[] {
                 "Default",
                 "Objects",
-                "Enemies",
+                "People",
                 "Player",
+                "Light"
             };
             // the layers are used for collisions
             // all layers collide with one another
@@ -85,8 +99,10 @@ public class Liftoff extends Game
         // so, the suggested method is creating scenes individually as super classes,
         // then instantiating them here.
         return new Scene[] {
+            new MainMenu(),
             new MapScene(),
             new KitchenScene(),
+            new PotsScene()
 //                new LevelTestScene()
         };
     }

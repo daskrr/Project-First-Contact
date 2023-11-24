@@ -2,7 +2,7 @@ package puntozero.liftoff.inventory;
 
 import pxp.engine.data.assets.SpriteAsset;
 
-public abstract class InventoryItem
+public class InventoryItem
 {
     public String name;
     public SpriteAsset sprite;

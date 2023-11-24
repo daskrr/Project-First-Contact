@@ -2,6 +2,7 @@ package puntozero.liftoff.scenes;
 
 import processing.event.MouseEvent;
 import puntozero.liftoff.components.MapPlayerController;
+import puntozero.liftoff.components.PlayerInventory;
 import puntozero.liftoff.data.SceneIndex;
 import puntozero.liftoff.manager.SceneStateManager;
 import puntozero.liftoff.prefabs.Door;
@@ -80,6 +81,8 @@ public class MapScene extends Scene
             () -> new Door(0, new Vector2(6.65f, -.95f), onClick),
 
             () -> new MapPlayer(new Vector2(1.2f,2f)),
+
+            PlayerInventory::create
         };
 
         this.setGameObjects(suppliers);
