@@ -3,10 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/liftoff</output-path>
     <root id="archive" name="liftoff.jar">
       <element id="module-output" name="liftoff" />
-      <element id="library" level="project" name="core" />
-      <element id="library" level="project" name="PXP" />
-      <element id="library" level="project" name="sound" />
-      <element id="library" level="project" name="video" />
     </root>
   </artifact>
 </component>

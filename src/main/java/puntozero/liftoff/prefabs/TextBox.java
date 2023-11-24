@@ -76,7 +76,7 @@ public class TextBox extends GameObject
         scene.context.runLater(this, time, () -> {
             if (this.isDestroyed) return;
 
-            this.isActive = false;
+            this.destroy();
         });
     }
 }

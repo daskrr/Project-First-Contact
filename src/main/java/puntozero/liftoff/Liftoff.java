@@ -47,6 +47,7 @@ public class Liftoff extends Game
         AssetManager.createSprite("potSlot", "kitchen/pot_slot.png", 16);
 
         AssetManager.createSprite("item_matchBox", "items/matchBox.png", 16);
+        AssetManager.createSprite("item_pot", "items/pot.png", 16);
 
         AssetManager.createSpriteSheet("levelPlayer", "level_player.png", 16, 6, 15);
         AssetManager.createFont("PressStart", new FontAsset("fonts/PressStart2P-Regular.ttf", null,null,null, 40, true));

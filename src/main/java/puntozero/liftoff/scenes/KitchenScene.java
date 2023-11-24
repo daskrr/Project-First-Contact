@@ -167,7 +167,7 @@ public class KitchenScene extends Scene
 
                 // display message
                 addGameObject(text);
-                text.remove(5f);
+                text.remove(3f);
                 getGameObject(object).destroy(); // destroy since we don't want to be able to interact again
 
                 LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");

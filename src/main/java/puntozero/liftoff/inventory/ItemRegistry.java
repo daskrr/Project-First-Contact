@@ -5,7 +5,8 @@ import pxp.engine.data.assets.SpriteAsset;
 
 public enum ItemRegistry
 {
-    MATCHES(new InventoryItem("matchBox", AssetManager.get("item_matchBox", SpriteAsset.class)));
+    MATCHES(new InventoryItem("matchBox", AssetManager.get("item_matchBox", SpriteAsset.class))),
+    POT(new InventoryItem("pot", AssetManager.get("item_pot", SpriteAsset.class)));
 
     public final InventoryItem item;
     ItemRegistry(InventoryItem item) {

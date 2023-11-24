@@ -1,7 +1,9 @@
 package puntozero.liftoff.prefabs;
 
 import processing.event.MouseEvent;
+import puntozero.liftoff.components.PlayerInventory;
 import puntozero.liftoff.data.SceneIndex;
+import puntozero.liftoff.inventory.ItemRegistry;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.Transform;
 import pxp.engine.core.component.BoxCollider;
@@ -87,6 +89,7 @@ public class Pot extends GameObject
         private void checkPots() {
             if (PotSlot.correctPots != 4) return;
 
+            PlayerInventory.addItem(ItemRegistry.POT.item);
             ctx().setScene(SceneIndex.KITCHEN.index);
         }
 

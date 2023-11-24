@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="liftoff_full">
+    <output-path>$PROJECT_DIR$/out/artifacts/liftoff_full</output-path>
+    <root id="archive" name="liftoff_full.jar">
+      <element id="module-output" name="liftoff" />
+      <element id="library" level="project" name="core" />
+      <element id="library" level="project" name="PXP" />
+      <element id="library" level="project" name="sound" />
+      <element id="library" level="project" name="video" />
+      <element id="directory" name="META-INF">
+        <element id="dir-copy" path="$PROJECT_DIR$/src/main/java/META-INF" />
+      </element>
+    </root>
+  </artifact>
+</component>
