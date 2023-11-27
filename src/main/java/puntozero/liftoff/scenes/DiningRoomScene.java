@@ -1,10 +1,9 @@
 package puntozero.liftoff.scenes;
 
+import processing.event.MouseEvent;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
-import puntozero.liftoff.prefabs.Exit;
-import puntozero.liftoff.prefabs.Interactable;
-import puntozero.liftoff.prefabs.LevelPlayer;
+import puntozero.liftoff.prefabs.*;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.Scene;
 import pxp.engine.core.Transform;
@@ -12,11 +11,14 @@ import pxp.engine.core.component.Camera;
 import pxp.engine.core.component.Component;
 import pxp.engine.core.component.SpriteRenderer;
 import pxp.engine.core.component.ui.Image;
+import pxp.engine.data.Color;
 import pxp.engine.data.GameObjectSupplier;
 import pxp.engine.data.Vector2;
 import pxp.engine.data.assets.AssetManager;
+import pxp.engine.data.assets.FontAsset;
 import pxp.engine.data.assets.SpriteAsset;
 import pxp.engine.data.event.PXPEvent;
+import pxp.engine.data.event.PXPSingleEvent;
 import pxp.logging.Debug;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ public class DiningRoomScene extends Scene {
         public boolean napkin = true;
         public boolean plate = true;
         public boolean isOnChair = false;
+        public float defaultY = 0f;
 
         @Override
         public GameObjectSupplier[] restoreSceneState(Scene s) {
@@ -51,6 +54,14 @@ public class DiningRoomScene extends Scene {
                         scene.climbChair("chairLeft"))
                 {{
                     transform = new Transform(new Vector2(-11.7f,5.35f));
+                }});
+                add(() -> new Interactable("chairRight",
+                        new Vector2(),
+                        new Vector2(1.6f, 1.6f),
+                        new Image(AssetManager.get("chairRight", SpriteAsset.class)),
+                        scene.climbChair("chairRight"))
+                {{
+                    transform = new Transform(new Vector2(-1.82f,5.35f));
                 }});
             }};
 
@@ -78,14 +89,24 @@ public class DiningRoomScene extends Scene {
         }
     }
 
+    //TODO: make mouse event???
     private PXPEvent climbChair(String object) {
         return new PXPEvent(){
             @Override
             public void invoke() {
-                //TODO: do something
-                state.isOnChair = true;
+                LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
+
+                state.isOnChair = !state.isOnChair;
+
+                if (state.isOnChair){
+                    levelPlayer.transform.position.y = levelPlayer.transform.position.y - 3.9f;
+                }
+                else {
+                    levelPlayer.transform.position.y = state.defaultY;
+                }
 
                 Debug.log(object + " clicked");
+                Debug.log(state.isOnChair);
             }
         };
     }
@@ -94,8 +115,8 @@ public class DiningRoomScene extends Scene {
         return new PXPEvent(){
             @Override
             public void invoke() {
-                //TODO: only do this when standing on chair
-                if (state.isOnChair && !state.napkin){
+                //only do this when standing on chair
+                if (state.isOnChair){
                     getGameObject(object).destroy();
                     //TODO: do I need this here?
 //                    LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
@@ -111,7 +132,7 @@ public class DiningRoomScene extends Scene {
         return new PXPEvent() {
             @Override
             public void invoke() {
-                //TODO: only do this when standing on chair
+                //only do this when standing on chair
                 if (state.isOnChair) {
                     getGameObject(object).destroy();
                     //TODO: do I need this here?
@@ -144,5 +165,8 @@ public class DiningRoomScene extends Scene {
         // we need to reset the game object suppliers when the scene is loaded again, in order to preserve state
         this.setGameObjects(state.restoreSceneState(this));
         super.load();
+
+        LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
+        this.state.defaultY = levelPlayer.transform.position.y;
     }
 }
