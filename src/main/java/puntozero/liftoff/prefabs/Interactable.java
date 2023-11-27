@@ -34,6 +34,7 @@ public class Interactable extends GameObject
             if (!collider.gameObject.name.equals("levelPlayer")) return;
 
             onInteract.invoke();
+            interacted = true;
         }
         @Override
         public void triggerStay(Collider collider) {
@@ -43,7 +44,6 @@ public class Interactable extends GameObject
             if (!collider.gameObject.name.equals("levelPlayer")) return;
 
             onInteract.invoke();
-
             interacted = true;
         }
         @Override
@@ -52,6 +52,8 @@ public class Interactable extends GameObject
             if (!collider.gameObject.name.equals("levelPlayer")) return;
 
             onInteract.invoke();
+            canInteract = false;
+            interacted = false;
         }
     }
 
