@@ -7,7 +7,6 @@ import puntozero.liftoff.inventory.ItemRegistry;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.Transform;
 import pxp.engine.core.component.BoxCollider;
-import pxp.engine.core.component.Collider;
 import pxp.engine.core.component.Component;
 import pxp.engine.core.component.SpriteRenderer;
 import pxp.engine.core.component.pointer.PointerHandlerDrag;

@@ -75,8 +75,7 @@ public class Exit extends GameObject
             @Override
             public void invoke(MouseEvent mouseEvent) {
             // save position
-            // TODO
-//            SceneStateManager.getInstance().levelPlayerPosition = getGameObject("levelPlayer").transform.position;
+            SceneStateManager.getInstance().levelPlayerPosition = scene.getGameObject("levelPlayer").transform.position;
 
             // change scene
             scene.context.setScene(SceneIndex.MAP.index);
