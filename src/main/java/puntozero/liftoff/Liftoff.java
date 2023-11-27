@@ -1,9 +1,9 @@
 package puntozero.liftoff;
 
 import puntozero.liftoff.manager.SceneStateManager;
-import puntozero.liftoff.scenes.KitchenScene;
-import puntozero.liftoff.scenes.LevelTestScene;
-import puntozero.liftoff.scenes.MapScene;
+import puntozero.liftoff.scenes.*;
+import puntozero.liftoff.scenes.minigame.BooksScene;
+import puntozero.liftoff.scenes.minigame.PotsScene;
 import pxp.engine.core.Game;
 import pxp.engine.core.Scene;
 import pxp.engine.data.Color;
@@ -20,22 +20,54 @@ public class Liftoff extends Game
     @Override
     public GameSettings startup() {
         // adding assets to the game
+        // test
         AssetManager.createSprite("test", "image.png", 16);
-        AssetManager.createSpriteSheet("mapPlayer", "map_player.png", 16, 10, 6);
+        // menu
+        AssetManager.createSprite("mainMenu", "mainMenu.png", 16);
+
+        // map
         AssetManager.createSprite("map", "map.png", 16);
+
+        // ui
         AssetManager.createSprite("fill", "fill.png", 1);
         AssetManager.createSprite("blank", "blank.png", 1);
         AssetManager.createSprite("exit", "exit.png", 16);
         AssetManager.createSprite("circle", "circle.png", 1000);
 
+        // kitchen
         AssetManager.createSprite("kitchenBackground", "kitchen/background.png", 16);
+        AssetManager.createSprite("kitchenLight", "kitchen/light.png", 16);
         AssetManager.createSprite("doorLeft", "kitchen/door_left.png", 16);
         AssetManager.createSprite("doorRight", "kitchen/door_right.png", 16);
         AssetManager.createSprite("drawerRight", "kitchen/drawer_right.png", 16);
         AssetManager.createSprite("drawerLeft", "kitchen/drawer_left.png", 16);
         AssetManager.createSprite("minigameDoor", "kitchen/minigameDoor.png", 16);
 
+        // pots
+        AssetManager.createSprite("bigPot", "kitchen/big_pot.png", 16);
+        AssetManager.createSprite("mediumPot", "kitchen/medium_pot.png", 16);
+        AssetManager.createSprite("smallPot", "kitchen/small_pot.png", 16);
+        AssetManager.createSprite("extraSmallPot", "kitchen/extra_small_pot.png", 16);
+        AssetManager.createSprite("potSlot", "kitchen/pot_slot.png", 16);
+
+        // library
+        AssetManager.createSprite("libraryBackground", "library/background.jpg", 150);
+        AssetManager.createSprite("book1", "library/book1.png", 150);
+        AssetManager.createSprite("book2", "library/book2.png", 150);
+        AssetManager.createSprite("book3", "library/book3.png", 150);
+        AssetManager.createSprite("book4", "library/book4.png", 150);
+        AssetManager.createSprite("book5", "library/book5.png", 150);
+        AssetManager.createSprite("book6", "library/book6.png", 150);
+
+        // items
+        AssetManager.createSprite("item_matchBox", "items/matchBox.png", 16);
+        AssetManager.createSprite("item_pot", "items/pot.png", 16);
+
+        // player
         AssetManager.createSpriteSheet("levelPlayer", "level_player.png", 16, 6, 15);
+        AssetManager.createSpriteSheet("mapPlayer", "map_player.png", 16, 10, 6);
+
+        // font
         AssetManager.createFont("PressStart", new FontAsset("fonts/PressStart2P-Regular.ttf", null,null,null, 40, true));
 
         // the asset path doesn't need to contain 'data/', but the
@@ -57,8 +89,9 @@ public class Liftoff extends Game
             sortingLayers = new String[] {
                 "Default",
                 "Objects",
-                "Enemies",
+                "People",
                 "Player",
+                "Light"
             };
             // the layers are used for collisions
             // all layers collide with one another
@@ -85,8 +118,12 @@ public class Liftoff extends Game
         // so, the suggested method is creating scenes individually as super classes,
         // then instantiating them here.
         return new Scene[] {
+            new MainMenu(),
             new MapScene(),
             new KitchenScene(),
+            new PotsScene(),
+            new LibraryScene(),
+            new BooksScene()
 //                new LevelTestScene()
         };
     }

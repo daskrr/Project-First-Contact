@@ -71,4 +71,12 @@ public class TextBox extends GameObject
             }}
         });
     }
+
+    public void remove(float time) {
+        scene.context.runLater(this, time, () -> {
+            if (this.isDestroyed) return;
+
+            this.destroy();
+        });
+    }
 }

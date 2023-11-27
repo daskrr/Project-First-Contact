@@ -1,31 +1,70 @@
 package puntozero.liftoff.prefabs;
 
+import processing.event.MouseEvent;
+import puntozero.liftoff.components.PlayerInventory;
 import puntozero.liftoff.inventory.InventoryItem;
+import puntozero.liftoff.inventory.ItemRegistry;
 import pxp.engine.core.GameObject;
-import pxp.engine.core.RectTransform;
 import pxp.engine.core.component.Component;
-import pxp.engine.core.component.ui.Image;
+import pxp.engine.core.component.SpriteRenderer;
+import pxp.engine.core.component.pointer.PointerHandlerMouse;
+import pxp.engine.data.Pivot;
 import pxp.engine.data.Vector2;
-import pxp.engine.data.Vector3;
-import pxp.engine.data.ui.Anchor;
+import pxp.logging.Debug;
 
 public class Item extends GameObject
 {
-    public static final int SIZE = 100;
+    private class GroundItem extends Component implements PointerHandlerMouse {
+        private boolean hovering = false;
 
-    public Item(InventoryItem item, int index) {
-        super(item.name);
+        @Override
+        public void mouseClick(MouseEvent mouseEvent) {
+//            gameObject.isActive = false; // TODO can't destroy????
+            gameObject.destroy();
+            PlayerInventory.addItem(item);
+        }
+
+        @Override
+        public void mouseScroll(MouseEvent mouseEvent) {}
+        @Override
+        public void mouseDown(MouseEvent mouseEvent) {}
+        @Override
+        public void mouseUp(MouseEvent mouseEvent) {}
+
+        @Override
+        public boolean checkOverlap(Vector2 mousePos) {
+            Vector2 worldPos = this.gameObject.scene.getCamera().screenToWorldPosition(mousePos);
+            return rectTransform().checkOverlap(worldPos, Pivot.CENTER);
+        }
+
+        @Override
+        public void setHovering(boolean b) {
+            this.hovering = b;
+        }
+        @Override
+        public boolean isHovering() {
+            return this.hovering;
+        }
+    }
+
+    private final InventoryItem item;
+
+    public Item(ItemRegistry reg, Vector2 position) {
+        this(reg.item, position);
+    }
+
+    public Item(InventoryItem item, Vector2 position) {
+        super("groundItem_" + item.name);
+
+        this.item = item;
 
         this.setComponents(new Component[] {
-            new Image(item.sprite)
+            new SpriteRenderer(item.sprite) {{
+                setSortingLayer("Objects");
+            }},
+            new GroundItem()
         });
 
-        this.transform = new RectTransform(
-            new Vector2(0, -(index * SIZE)),
-            new Vector3(),
-            new Vector2(1,1),
-            new Vector2(SIZE, SIZE),
-            Anchor.BOTTOM_CENTER
-        );
+        transform.position = position;
     }
 }

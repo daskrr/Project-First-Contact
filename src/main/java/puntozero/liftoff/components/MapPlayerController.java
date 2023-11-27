@@ -34,6 +34,7 @@ public class MapPlayerController extends Component
     private boolean moving = false;
 
     public boolean goThroughDoor = false;
+    public int targetedDoorIndex = -1;
     public boolean isNearDoor = false;
     public int doorIndex = 0;
 

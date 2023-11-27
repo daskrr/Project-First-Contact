@@ -2,9 +2,12 @@ package puntozero.liftoff.data;
 
 public enum SceneIndex
 {
-//    MAIN(0),
-    MAP(0), //1
-    KITCHEN(1); //2
+    MAIN_MENU(0),
+    MAP(1),
+    KITCHEN(2),
+    POTS(3),
+    LIBRARY(4),
+    BOOKS(5);
 
     public final int index;
 

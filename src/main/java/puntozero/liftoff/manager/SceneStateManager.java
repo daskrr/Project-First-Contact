@@ -32,4 +32,10 @@ public class SceneStateManager
 
         return (T) states.get(scene.hashCode());
     }
+
+    public void reset() {
+        this.states.clear();
+        this.mapPlayerPosition = null;
+        this.levelPlayerPosition = null;
+    }
 }

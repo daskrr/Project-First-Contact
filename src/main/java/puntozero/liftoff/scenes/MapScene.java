@@ -2,6 +2,7 @@ package puntozero.liftoff.scenes;
 
 import processing.event.MouseEvent;
 import puntozero.liftoff.components.MapPlayerController;
+import puntozero.liftoff.components.PlayerInventory;
 import puntozero.liftoff.data.SceneIndex;
 import puntozero.liftoff.manager.SceneStateManager;
 import puntozero.liftoff.prefabs.Door;
@@ -24,22 +25,7 @@ public class MapScene extends Scene
     public MapScene() {
         super();
 
-        PXPSingleEvent<MouseEvent> onClick = new PXPSingleEvent<>() {
-            @Override
-            public void invoke(MouseEvent event) {
-                GameObject player = context.getCurrentScene().getGameObjectDeep("mapPlayer");
-                if (player == null) return;
-                if (!(player instanceof MapPlayer mapPlayer)) return;
 
-                mapPlayer.controller.goThroughDoor = true;
-
-                // if the player is already near a door, go through it
-                if (mapPlayer.controller.isNearDoor) {
-                    SceneStateManager.getInstance().mapPlayerPosition = mapPlayer.transform.position;
-                    context.setScene(mapPlayer.controller.doorIndex);
-                }
-            }
-        };
 
         GameObjectSupplier[] suppliers = new GameObjectSupplier[] {
             () -> new GameObject("camera", new Component[]{
@@ -67,21 +53,43 @@ public class MapScene extends Scene
                 transform = new Transform(new Vector2(0,0));
             }},
             // middle bottom door
-            () -> new Door(0, new Vector2(-1.4f, .95f), onClick),
+            () -> new Door(0, new Vector2(-1.4f, .95f), onClick(0)),
             // left bottom door
-            () -> new Door(0, new Vector2(-5.1f, .95f), onClick),
+            () -> new Door(SceneIndex.LIBRARY.index, new Vector2(-5.1f, .95f), onClick(SceneIndex.LIBRARY.index)),
 
             // middle top door
-            () -> new Door(SceneIndex.KITCHEN.index, new Vector2(-2.9f, -.95f), onClick),
+            () -> new Door(SceneIndex.KITCHEN.index, new Vector2(-2.9f, -.95f), onClick(SceneIndex.KITCHEN.index)),
             // left top door
-            () -> new Door(0, new Vector2(-6.8f, -.95f), onClick),
+            () -> new Door(0, new Vector2(-6.8f, -.95f), onClick(0)),
 
             // right top door
-            () -> new Door(0, new Vector2(6.65f, -.95f), onClick),
+            () -> new Door(0, new Vector2(6.65f, -.95f), onClick(0)),
 
             () -> new MapPlayer(new Vector2(1.2f,2f)),
+
+            PlayerInventory::create
         };
 
         this.setGameObjects(suppliers);
+    }
+
+    private PXPSingleEvent<MouseEvent> onClick(int index) {
+        return new PXPSingleEvent<>() {
+            @Override
+            public void invoke(MouseEvent event) {
+                GameObject player = context.getCurrentScene().getGameObjectDeep("mapPlayer");
+                if (player == null) return;
+                if (!(player instanceof MapPlayer mapPlayer)) return;
+
+                mapPlayer.controller.goThroughDoor = true;
+                mapPlayer.controller.targetedDoorIndex = index;
+
+                // if the player is already near a door, go through it
+                if (mapPlayer.controller.isNearDoor && mapPlayer.controller.doorIndex == index) {
+                    SceneStateManager.getInstance().mapPlayerPosition = mapPlayer.transform.position;
+                    context.setScene(mapPlayer.controller.doorIndex);
+                }
+            }
+        };
     }
 }

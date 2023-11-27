@@ -1,5 +1,6 @@
 package puntozero.liftoff.prefabs;
 
+import processing.core.PConstants;
 import processing.event.MouseEvent;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.RectTransform;
@@ -26,7 +27,6 @@ public class Interactable extends GameObject
     private boolean canInteract = false;
 
     private class InteractableHandler extends Component {
-
         private boolean interacted = false;
         @Override
         public void triggerEnter(Collider collider) {
@@ -97,6 +97,8 @@ public class Interactable extends GameObject
         return new PXPSingleEvent<>() {
             @Override
             public void invoke(MouseEvent mouseEvent) {
+                if (mouseEvent.getButton() != PConstants.RIGHT) return;
+
                 canInteract = true;
             }
         };
