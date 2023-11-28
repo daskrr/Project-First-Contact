@@ -7,7 +7,9 @@ public enum SceneIndex
     KITCHEN(2),
     POTS(3),
     LIBRARY(4),
-    BOOKS(5);
+    BOOKS(5),
+    DINING_ROOM(6),
+    DISCIPLINE_ROOM(7);
 
     public final int index;
 

@@ -17,6 +17,9 @@ public class SceneStateManager
     public Vector2 mapPlayerPosition = null;
     public Vector2 levelPlayerPosition = null;
 
+    public boolean libraryUnlocked = false;
+    public boolean disciplineUnlocked = false;
+
     public SceneStateManager() {
         if (instance == null)
             instance = this;

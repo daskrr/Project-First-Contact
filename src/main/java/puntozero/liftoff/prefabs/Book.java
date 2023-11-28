@@ -3,6 +3,7 @@ package puntozero.liftoff.prefabs;
 import processing.event.MouseEvent;
 import puntozero.liftoff.components.PlayerInventory;
 import puntozero.liftoff.data.SceneIndex;
+import puntozero.liftoff.inventory.InventoryItem;
 import puntozero.liftoff.inventory.ItemRegistry;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.Transform;
@@ -18,21 +19,23 @@ import pxp.engine.data.assets.SpriteAsset;
 public class Book extends GameObject
 {
     // hardcoded, yes :)
-    public static final Type CORRECT_TYPE = Type.BLACK;
+    public static final Type CORRECT_TYPE = Type.ORANGE;
     public static final float SIZE = 1.5f;
 
     public enum Type {
-        GREEN(AssetManager.get("book1", SpriteAsset.class)),
-        PURPLE(AssetManager.get("book2", SpriteAsset.class)),
-        PINK(AssetManager.get("book3", SpriteAsset.class)),
-        BLUE(AssetManager.get("book4", SpriteAsset.class)),
-        BLACK(AssetManager.get("book5", SpriteAsset.class)),
-        RED(AssetManager.get("book6", SpriteAsset.class));
+        GREEN(AssetManager.get("book1", SpriteAsset.class), ItemRegistry.BOOK_GREEN.item),
+        PURPLE(AssetManager.get("book2", SpriteAsset.class), ItemRegistry.BOOK_PURPLE.item),
+        PINK(AssetManager.get("book3", SpriteAsset.class), ItemRegistry.BOOK_PINK.item),
+        BLUE(AssetManager.get("book4", SpriteAsset.class), ItemRegistry.BOOK_BLUE.item),
+        ORANGE(AssetManager.get("book5", SpriteAsset.class), ItemRegistry.BOOK_ORANGE.item),
+        RED(AssetManager.get("book6", SpriteAsset.class), ItemRegistry.BOOK_RED.item);
 
         public final SpriteAsset sprite;
+        public final InventoryItem item;
 
-        Type(SpriteAsset sprite) {
+        Type(SpriteAsset sprite, InventoryItem item) {
             this.sprite = sprite;
+            this.item = item;
         }
     }
 
@@ -57,13 +60,8 @@ public class Book extends GameObject
 
         @Override
         public void mouseClick(MouseEvent mouseEvent) {
-            if (type == CORRECT_TYPE) {
-                PlayerInventory.addItem(ItemRegistry.BOOK.item);
-                context().setScene(SceneIndex.LIBRARY.index);
-            }
-            else {
-                // TODO bad stuff happens
-            }
+            PlayerInventory.addItem(type.item);
+            context().setScene(SceneIndex.LIBRARY.index);
         }
 
         @Override
@@ -90,7 +88,7 @@ public class Book extends GameObject
                 }}
         });
 
-        transform = new Transform(position);
+        transform = new Transform(position, new Vector2(.5f, .5f));
 //        transform = new RectTransform(
 //            position,
 //            new Vector3(0,0,0),

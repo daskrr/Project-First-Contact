@@ -6,8 +6,11 @@ import pxp.engine.core.GameObject;
 import pxp.engine.core.RectTransform;
 import pxp.engine.core.component.Component;
 import pxp.engine.core.component.ui.Canvas;
+import pxp.engine.core.component.ui.Image;
 import pxp.engine.data.Vector2;
 import pxp.engine.data.Vector3;
+import pxp.engine.data.assets.AssetManager;
+import pxp.engine.data.assets.SpriteAsset;
 import pxp.engine.data.ui.Anchor;
 import pxp.engine.data.ui.RenderMode;
 
@@ -48,6 +51,10 @@ public class PlayerInventory extends Component
             }
     }
 
+    public static void removeBooks() {
+        items.removeIf(item -> item.name.contains("book"));
+    }
+
     public static InventoryItem getItem(String name) {
         for (InventoryItem item : items)
             if (item.name.equals(name))
@@ -64,21 +71,25 @@ public class PlayerInventory extends Component
     }
 
     public static GameObject create() {
-        GameObject container = new GameObject("inventoryContainer") {{
+        GameObject container = new GameObject("inventoryContainer", new Component[] {
+//            new Image(AssetManager.get("inventoryBackground", SpriteAsset.class)) {{
+//                preserveAspect = true;
+//            }}
+        }) {{
             transform = new RectTransform(
-                    new Vector2(-UIItem.SIZE / 2f,0),
-                    new Vector3(),
-                    new Vector2(1,1),
-                    new Vector2(UIItem.SIZE, 800),
-                    Anchor.BOTTOM_RIGHT
+                new Vector2(-UIItem.SIZE / 2f,0),
+                new Vector3(),
+                new Vector2(1,1),
+                new Vector2(UIItem.SIZE, 800),
+                Anchor.BOTTOM_RIGHT
             );
         }};
 
         return new GameObject("playerInventory", new Component[] {
-                new Canvas(RenderMode.CAMERA),
-                new PlayerInventory(container),
+            new Canvas(RenderMode.CAMERA),
+            new PlayerInventory(container),
         }, new GameObject[] {
-                container
+            container
         });
     }
 }

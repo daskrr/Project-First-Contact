@@ -81,12 +81,15 @@ public class LibraryScene extends Scene
         return new PXPEvent() {
             @Override
             public void invoke() {
-                getGameObject("books").destroy(); // destroy since we don't want to be able to interact again
+                // we don't destroy as this minigame is replayable
+                // we need to check if the player has a book in their inventory
+                PlayerInventory.removeBooks();
 
                 LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
                 levelPlayer.controller.destination = levelPlayer.transform.position;
 
-                state.minigame = false;
+                // not needed anymore
+                //state.minigame = false;
 
                 // save position
                 SceneStateManager.getInstance().levelPlayerPosition = levelPlayer.transform.position;

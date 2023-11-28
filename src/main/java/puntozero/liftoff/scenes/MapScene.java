@@ -7,6 +7,7 @@ import puntozero.liftoff.data.SceneIndex;
 import puntozero.liftoff.manager.SceneStateManager;
 import puntozero.liftoff.prefabs.Door;
 import puntozero.liftoff.prefabs.MapPlayer;
+import puntozero.liftoff.prefabs.Monologue;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.Scene;
 import pxp.engine.core.Transform;
@@ -24,8 +25,6 @@ public class MapScene extends Scene
 {
     public MapScene() {
         super();
-
-
 
         GameObjectSupplier[] suppliers = new GameObjectSupplier[] {
             () -> new GameObject("camera", new Component[]{
@@ -53,14 +52,14 @@ public class MapScene extends Scene
                 transform = new Transform(new Vector2(0,0));
             }},
             // middle bottom door
-            () -> new Door(0, new Vector2(-1.4f, .95f), onClick(0)),
+            () -> new Door(SceneIndex.DISCIPLINE_ROOM.index, new Vector2(-1.4f, .95f), onClick(SceneIndex.DISCIPLINE_ROOM.index)),
             // left bottom door
             () -> new Door(SceneIndex.LIBRARY.index, new Vector2(-5.1f, .95f), onClick(SceneIndex.LIBRARY.index)),
 
             // middle top door
             () -> new Door(SceneIndex.KITCHEN.index, new Vector2(-2.9f, -.95f), onClick(SceneIndex.KITCHEN.index)),
             // left top door
-            () -> new Door(0, new Vector2(-6.8f, -.95f), onClick(0)),
+            () -> new Door(SceneIndex.DINING_ROOM.index, new Vector2(-6.8f, -.95f), onClick(SceneIndex.DINING_ROOM.index)),
 
             // right top door
             () -> new Door(0, new Vector2(6.65f, -.95f), onClick(0)),
@@ -86,8 +85,26 @@ public class MapScene extends Scene
 
                 // if the player is already near a door, go through it
                 if (mapPlayer.controller.isNearDoor && mapPlayer.controller.doorIndex == index) {
-                    SceneStateManager.getInstance().mapPlayerPosition = mapPlayer.transform.position;
-                    context.setScene(mapPlayer.controller.doorIndex);
+                    boolean canGo = true;
+
+                    // check if player can enter room
+                    if (index == SceneIndex.LIBRARY.index) {
+                        if (!SceneStateManager.getInstance().libraryUnlocked)
+                            canGo = false;
+                    }
+                    else if (index == SceneIndex.DISCIPLINE_ROOM.index)
+                        if (!SceneStateManager.getInstance().disciplineUnlocked)
+                            canGo = false;
+
+                    if (canGo) {
+                        SceneStateManager.getInstance().mapPlayerPosition = mapPlayer.transform.position;
+                        context.setScene(mapPlayer.controller.doorIndex);
+                    }
+                    else {
+                        Monologue monologue = new Monologue("I can't go there yet...");
+                        addGameObject(monologue);
+                        monologue.remove(3.5f);
+                    }
                 }
             }
         };
