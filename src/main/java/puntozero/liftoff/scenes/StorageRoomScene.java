@@ -2,7 +2,6 @@ package puntozero.liftoff.scenes;
 
 import processing.event.MouseEvent;
 import puntozero.liftoff.components.PlayerInventory;
-import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
 import puntozero.liftoff.prefabs.*;
@@ -38,6 +37,7 @@ public class StorageRoomScene extends Scene {
         public boolean redPotion = false;
         public boolean greenPotion = false;
         public boolean bluePotion = false;
+        public boolean craftingTable = false;
         @Override
         public GameObjectSupplier[] restoreSceneState(Scene s) {
             StorageRoomScene scene = (StorageRoomScene) s;
@@ -85,16 +85,29 @@ public class StorageRoomScene extends Scene {
                     {{
                         transform = new Transform(new Vector2(-7.9f, 4.15f));
                     }});
-
-                if (allPotionsCollected /*&& gameIntroFinished && hasAllItems*/){
-
-                }
             }
-
-
 
             return suppliers.toArray(new GameObjectSupplier[0]);
         }
+    }
+
+    private PXPEvent openMinigame() {
+        return new PXPEvent() {
+            @Override
+            public void invoke() {
+                getGameObject("craftingTable").destroy(); // destroy since we don't want to be able to interact again
+
+                LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
+                levelPlayer.controller.destination = levelPlayer.transform.position;
+
+                // save position
+                SceneStateManager.getInstance().levelPlayerPosition = levelPlayer.transform.position;
+
+                // change scene to minigame scene
+                //TODO: uncomment
+                //context.setScene(SceneIndex.CRAFTING.index);
+            }
+        };
     }
 
     private PXPEvent takePotion(String object) {
@@ -116,6 +129,22 @@ public class StorageRoomScene extends Scene {
                 }
 
                 getGameObject(object).destroy();
+
+                if (state.redPotion && state.greenPotion && state.bluePotion){
+                    TextBox textBox = new TextBox(
+                            "Time to make the bomb on the table.",
+                            17,
+                            new Vector2(600,200),
+                            new Color(30, 32, 36, 240),
+                            AssetManager.get("PressStart", FontAsset.class),
+                            Color.white(),
+                            new Vector2(550, -1)
+                    );
+                    addGameObject(textBox);
+                    textBox.remove(textShowTime);
+
+                    state.allPotionsCollected = true;
+                }
             }
         };
     }
@@ -136,6 +165,8 @@ public class StorageRoomScene extends Scene {
         AssetManager.createSprite("potionBlue", "storageRoom/potion_blue.png", 16);
         AssetManager.createSprite("potionGreen", "storageRoom/potion_green.png", 16);
         AssetManager.createSprite("potionRed", "storageRoom/potion_red.png", 16);
+
+        AssetManager.createSprite("craftingTable", "storageRoom/craftingtable.png", 16);
     }
 
     @Override
@@ -149,11 +180,34 @@ public class StorageRoomScene extends Scene {
             //addGameObject(readNote());
 
             LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
-            //TODO: player can't move while intro dialogue is showing
+            //TODO: player can't move while intro dialogue is showing (uncomment)
+            //levelPlayer.controller.setLocked(true);
+        }
+    }
+
+    @Override
+    protected void render() {
+        super.render();
+
+        //TODO: uncomment this
+        if (state.allPotionsCollected /*&& state.gameIntroFinished && state.hasAllItems*/ && !state.craftingTable){
+            //TODO: Interact with table to open craft minigame
+            Interactable in = new Interactable("craftingTable",
+                    new Vector2(),
+                    new Vector2(5f, 2.5f),
+                    new Image(AssetManager.get("craftingTable", SpriteAsset.class)),
+                    this.openMinigame())
+            {{
+                transform = new Transform(new Vector2(5.3f, 5f));
+            }};
+
+            addGameObject(in);
+            state.craftingTable = true;
         }
     }
 
     private final float textShowTime = 6f;
+    //TODO: make intro dialogue skipable
     private void showIntroDialogue() {
         List<TextBox> texts = new ArrayList<>() {{
             add(new TextBox(
@@ -267,6 +321,9 @@ public class StorageRoomScene extends Scene {
                             );
                             addGameObject(textBox);
                             textBox.remove(textShowTime);
+
+                            //TODO: player can move after the intro dialogue is over (uncomment)
+                            //levelPlayer.controller.setLocked(false);
                         }
                     };
                     color = Color.white();
