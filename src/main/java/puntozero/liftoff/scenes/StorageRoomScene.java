@@ -191,7 +191,6 @@ public class StorageRoomScene extends Scene {
 
         //TODO: uncomment this
         if (state.allPotionsCollected /*&& state.gameIntroFinished && state.hasAllItems*/ && !state.craftingTable){
-            //TODO: Interact with table to open craft minigame
             Interactable in = new Interactable("craftingTable",
                     new Vector2(),
                     new Vector2(5f, 2.5f),
