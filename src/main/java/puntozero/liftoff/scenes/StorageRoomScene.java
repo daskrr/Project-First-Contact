@@ -2,11 +2,10 @@ package puntozero.liftoff.scenes;
 
 import processing.event.MouseEvent;
 import puntozero.liftoff.components.PlayerInventory;
+import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
-import puntozero.liftoff.prefabs.Exit;
-import puntozero.liftoff.prefabs.LevelPlayer;
-import puntozero.liftoff.prefabs.TextBox;
+import puntozero.liftoff.prefabs.*;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.RectTransform;
 import pxp.engine.core.Scene;
@@ -22,6 +21,7 @@ import pxp.engine.data.*;
 import pxp.engine.data.assets.AssetManager;
 import pxp.engine.data.assets.FontAsset;
 import pxp.engine.data.assets.SpriteAsset;
+import pxp.engine.data.event.PXPEvent;
 import pxp.engine.data.event.PXPSingleEvent;
 import pxp.engine.data.ui.Anchor;
 import pxp.engine.data.ui.InteractableTransition;
@@ -34,6 +34,10 @@ public class StorageRoomScene extends Scene {
     public static class StorageRoomSceneState implements SceneState {
         private boolean gameIntroFinished = false;
         public boolean hasAllItems = false;
+        public boolean allPotionsCollected = false;
+        public boolean redPotion = false;
+        public boolean greenPotion = false;
+        public boolean bluePotion = false;
         @Override
         public GameObjectSupplier[] restoreSceneState(Scene s) {
             StorageRoomScene scene = (StorageRoomScene) s;
@@ -52,8 +56,68 @@ public class StorageRoomScene extends Scene {
                 add(PlayerInventory::create);
             }};
 
+            //TODO: uncomment this
+            if (!allPotionsCollected /*&& gameIntroFinished && hasAllItems*/){
+                if (!greenPotion)
+                    suppliers.add(() -> new Interactable("potionGreen",
+                            new Vector2(),
+                            new Vector2(1.6f, 1.6f),
+                            new Image(AssetManager.get("potionGreen", SpriteAsset.class)),
+                            scene.takePotion("potionGreen"))
+                    {{
+                        transform = new Transform(new Vector2(-2.7f, 2f));
+                    }});
+                if (!bluePotion)
+                    suppliers.add(() -> new Interactable("potionBlue",
+                            new Vector2(),
+                            new Vector2(1.6f, 1.6f),
+                            new Image(AssetManager.get("potionBlue", SpriteAsset.class)),
+                            scene.takePotion("potionBlue"))
+                    {{
+                        transform = new Transform(new Vector2(-10.2f, 6.3f));
+                    }});
+                if (!redPotion)
+                    suppliers.add(() -> new Interactable("potionRed",
+                            new Vector2(),
+                            new Vector2(1.6f, 1.6f),
+                            new Image(AssetManager.get("potionRed", SpriteAsset.class)),
+                            scene.takePotion("potionRed"))
+                    {{
+                        transform = new Transform(new Vector2(-7.9f, 4.15f));
+                    }});
+
+                if (allPotionsCollected /*&& gameIntroFinished && hasAllItems*/){
+
+                }
+            }
+
+
+
             return suppliers.toArray(new GameObjectSupplier[0]);
         }
+    }
+
+    private PXPEvent takePotion(String object) {
+        return new PXPEvent() {
+            @Override
+            public void invoke() {
+                //TODO: Add potions to inventory (uncomment)
+                if (object.equals("potionRed")) {
+                    //PlayerInventory.addItem(ItemRegistry.POTIONRED.item);
+                    state.redPotion = true;
+                }
+                else if (object.equals("potionBlue")) {
+                    //PlayerInventory.addItem(ItemRegistry.POTIONBLUE.item);
+                    state.bluePotion = true;
+                }
+                else if (object.equals("potionGreen")) {
+                    //PlayerInventory.addItem(ItemRegistry.POTIONGREEN.item);
+                    state.greenPotion = true;
+                }
+
+                getGameObject(object).destroy();
+            }
+        };
     }
 
     private final StorageRoomSceneState state;
@@ -68,6 +132,10 @@ public class StorageRoomScene extends Scene {
         AssetManager.createSprite("storageBackground", "storageRoom/background.png", 16);
         AssetManager.createSprite("noteBig", "storageRoom/note_big.png", 16);
         AssetManager.createSprite("noteSmall", "storageRoom/note_small.png", 16);
+
+        AssetManager.createSprite("potionBlue", "storageRoom/potion_blue.png", 16);
+        AssetManager.createSprite("potionGreen", "storageRoom/potion_green.png", 16);
+        AssetManager.createSprite("potionRed", "storageRoom/potion_red.png", 16);
     }
 
     @Override
@@ -77,20 +145,16 @@ public class StorageRoomScene extends Scene {
         super.load();
 
         if (!state.gameIntroFinished) {
-            showDialogue();
+            showIntroDialogue();
             //addGameObject(readNote());
 
             LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
             //TODO: player can't move while intro dialogue is showing
         }
-
-        if (state.hasAllItems){
-            //TODO: you can now interact with the table
-        }
     }
 
     private final float textShowTime = 6f;
-    private void showDialogue() {
+    private void showIntroDialogue() {
         List<TextBox> texts = new ArrayList<>() {{
             add(new TextBox(
                 "I can’t take it any longer, I have to leave.",
@@ -186,9 +250,23 @@ public class StorageRoomScene extends Scene {
                     onClick = new PXPSingleEvent<>() {
                         @Override
                         public void invoke(MouseEvent mouseEvent) {
-                            //TODO: Add note to inventory
+                            //TODO: Add note to inventory (uncomment)
+                            //PlayerInventory.addItem(ItemRegistry.NOTE.item);
 
                             getGameObject("bigNoteCanvas").destroy();
+
+                            // show dialogue of missing part of note
+                            TextBox textBox = new TextBox(
+                                    "Oh a part of the note is missing. I should go find the missing piece of information.",
+                                    17,
+                                    new Vector2(600,200),
+                                    new Color(30, 32, 36, 240),
+                                    AssetManager.get("PressStart", FontAsset.class),
+                                    Color.white(),
+                                    new Vector2(550, -1)
+                            );
+                            addGameObject(textBox);
+                            textBox.remove(textShowTime);
                         }
                     };
                     color = Color.white();
