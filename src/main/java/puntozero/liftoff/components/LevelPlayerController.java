@@ -30,8 +30,6 @@ public class LevelPlayerController extends Component
         this.renderer = getComponentOfType(SpriteRenderer.class);
         this.animator = getComponentOfType(Animator.class);
 
-        renderer.flipX = true;
-
         Vector2 position = SceneStateManager.getInstance().levelPlayerPosition;
         if (position != null)
             transform().position = position.clone();
@@ -69,9 +67,9 @@ public class LevelPlayerController extends Component
     private void checkLookingDirection() {
         boolean isFacingLeft;
         if (this.directionX > Float.MIN_VALUE)
-            isFacingLeft = false;
-        else
             isFacingLeft = true;
+        else
+            isFacingLeft = false;
 
         renderer.flipX = isFacingLeft;
     }

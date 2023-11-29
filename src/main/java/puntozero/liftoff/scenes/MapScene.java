@@ -114,11 +114,11 @@ public class MapScene extends Scene
                             else {
                                 Monologue monologue = new Monologue("Oh, the library is locked.\nWhere can I find the key?\nThe adults always carry them in their pockets…");
                                 addGameObject(monologue);
-                                monologue.remove(3.5f);
+                                monologue.remove(5f);
                             }
                         }
                         else {
-                            Monologue monologue = new Monologue("Mh..locked...Noone misbehaved today so the discipline room is locked.");
+                            Monologue monologue = new Monologue("Mh... locked...\nNoone misbehaved today so\nthe discipline room is locked.");
                             addGameObject(monologue);
                             monologue.remove(3.5f);
                         }

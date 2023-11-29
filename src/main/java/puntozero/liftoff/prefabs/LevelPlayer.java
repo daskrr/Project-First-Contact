@@ -17,11 +17,11 @@ public class LevelPlayer extends GameObject
         this.controller = new LevelPlayerController();
 
         this.setComponents(new Component[] {
-            new SpriteRenderer(AssetManager.getSpriteFromSheet("levelPlayer", 0)) {{
+            new SpriteRenderer(AssetManager.get("levelPlayer", SpriteAsset.class)) {{
                 setSortingLayer("Player");
             }},
-            new Animation("idle", AssetManager.get("levelPlayer", SpriteAsset.class), 0, 5, 2f),
-            new Animation("walk", AssetManager.get("levelPlayer", SpriteAsset.class), 6, 13, 1f),
+            new Animation("idle", new SpriteAsset[] { AssetManager.get("levelPlayer", SpriteAsset.class) }, 1f),
+            new Animation("walk", new SpriteAsset[] { AssetManager.get("levelPlayer", SpriteAsset.class) }, 1f),
             new Animator("idle"),
             this.controller,
             new BoxCollider(new Vector2(), new Vector2(1f, 3f)) {{

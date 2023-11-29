@@ -28,7 +28,7 @@ public class Door extends GameObject
         this.transform = new RectTransform(position, new Vector3(), new Vector2(1,1), new Vector2(1000,1000));
 
         Image image = new Image(AssetManager.get("test", SpriteAsset.class)) {{
-            color = new Color(255,255,255,255);
+            color = new Color(255,255,255,0);
         }};
 
         this.setChildren(new GameObject[] {

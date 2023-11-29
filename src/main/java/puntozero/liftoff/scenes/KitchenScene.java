@@ -108,7 +108,12 @@ public class KitchenScene extends Scene
 
             suppliers.add(() -> new GameObject("light", new Component[] {
                 new SpriteRenderer(AssetManager.get("kitchenLight", SpriteAsset.class)) {{
-                    setSortingLayer("light");
+                    setSortingLayer("Light");
+                }}
+            }));
+            suppliers.add(() -> new GameObject("foreground", new Component[] {
+                new SpriteRenderer(AssetManager.get("kitchenForeground", SpriteAsset.class)) {{
+                    setSortingLayer("Foreground");
                 }}
             }));
 
@@ -158,7 +163,7 @@ public class KitchenScene extends Scene
             @Override
             public void invoke() {
                 TextBox text = new TextBox(
-                    "It's too heavy for you to open!",
+                    "I can't reach it!",
                     17,
                     new Vector2(600,200),
                     new Color(30, 32, 36, 240),

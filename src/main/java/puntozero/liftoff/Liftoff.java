@@ -39,6 +39,7 @@ public class Liftoff extends Game
         // kitchen
         AssetManager.createSprite("kitchenBackground", "kitchen/background.png", 16);
         AssetManager.createSprite("kitchenLight", "kitchen/light.png", 16);
+        AssetManager.createSprite("kitchenForeground", "kitchen/foreground.png", 16);
         AssetManager.createSprite("doorLeft", "kitchen/door_left.png", 16);
         AssetManager.createSprite("doorRight", "kitchen/door_right.png", 16);
         AssetManager.createSprite("drawerRight", "kitchen/drawer_right.png", 16);
@@ -53,13 +54,17 @@ public class Liftoff extends Game
         AssetManager.createSprite("potSlot", "kitchen/pot_slot.png", 16);
 
         // library
-        AssetManager.createSprite("libraryBackground", "library/background.jpg", 150);
+        AssetManager.createSprite("libraryBackground", "library/background.png", 16);
+        AssetManager.createSprite("libraryLight", "library/light.png", 16);
+        AssetManager.createSprite("libraryForeground", "library/foreground.png", 16);
         AssetManager.createSprite("book1", "library/book1.png", 16);
         AssetManager.createSprite("book2", "library/book2.png", 16);
         AssetManager.createSprite("book3", "library/book3.png", 16);
         AssetManager.createSprite("book4", "library/book4.png", 16);
         AssetManager.createSprite("book5", "library/book5.png", 16);
         AssetManager.createSprite("book6", "library/book6.png", 16);
+        AssetManager.createSprite("books", "library/books.png", 16);
+
         // book items
         AssetManager.createSprite("book_item1", "library/book_item1.png", 16);
         AssetManager.createSprite("book_item2", "library/book_item2.png", 16);
@@ -70,18 +75,22 @@ public class Liftoff extends Game
 
         // dining room
         AssetManager.createSprite("diningBackground", "diningRoom/background.png", 16);
+        AssetManager.createSprite("diningLight", "diningRoom/light.png", 16);
+        AssetManager.createSprite("diningForeground", "diningRoom/foreground.png", 16);
         AssetManager.createSprite("napkin", "diningRoom/napkin.png", 16);
         AssetManager.createSprite("chairLeft", "diningRoom/chair_left.png", 16);
         AssetManager.createSprite("chairRight", "diningRoom/chair_right.png", 16);
-        AssetManager.createSprite("plate", "diningRoom/plate.png", 16);
+        AssetManager.createSprite("plate", "items/plate.png", 16);
+        AssetManager.createSprite("brokenPlate", "items/broken_plate.png", 16);
         AssetManager.createSprite("adult", "diningRoom/adult.png", 16);
+        AssetManager.createSprite("kid", "diningRoom/boy.png", 16);
 
         // items
         AssetManager.createSprite("item_matchBox", "items/matchBox.png", 16);
         AssetManager.createSprite("item_pot", "items/pot.png", 16);
         AssetManager.createSprite("item_napkin", "items/napkin.png", 16);
         AssetManager.createSprite("item_note", "items/note.png", 16);
-        AssetManager.createSprite("item_keys", "keys/key_green.png", 16);
+        AssetManager.createSprite("item_keys", "items/keys.png", 16);
 
         // keys
         AssetManager.createSprite("keys/A", "keys/A.png", 16);
@@ -93,8 +102,8 @@ public class Liftoff extends Game
         AssetManager.createSprite("keys/hole", "keys/key_hole.png", 16);
 
         // player
-        AssetManager.createSpriteSheet("levelPlayer", "level_player.png", 16, 6, 15);
-        AssetManager.createSpriteSheet("mapPlayer", "map_player.png", 16, 10, 6);
+        AssetManager.createSprite("levelPlayer", "level_player.png", 16);
+        AssetManager.createSpriteSheet("mapPlayer", "map_player.png", 16, 1, 3);
         AssetManager.createSprite("mapAdult", "adultMap.png", 16);
 
         // font
@@ -111,7 +120,7 @@ public class Liftoff extends Game
             targetFPS = 140;
             background = new Color(0,0,0,255);
 
-            forceDrawGizmos = true;
+//            forceDrawGizmos = true;
 
             // the sorting layers need to contain "Default"
             // if they don't the "Default" layer will be placed automatically
@@ -121,7 +130,9 @@ public class Liftoff extends Game
                 "Objects",
                 "People",
                 "Player",
-                "Light"
+                "Light",
+                "Foreground",
+                "UI"
             };
             // the layers are used for collisions
             // all layers collide with one another

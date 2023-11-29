@@ -23,13 +23,13 @@ public class MapPlayer extends GameObject
                 sortingLayer = "Player";
                 pivot = Pivot.CENTER;
             }},
-            new Animation("idle_front", AssetManager.get("mapPlayer", SpriteAsset.class), 0, 5, 2f),
-            new Animation("idle_side", AssetManager.get("mapPlayer", SpriteAsset.class), 6, 11, 2f),
-            new Animation("idle_back", AssetManager.get("mapPlayer", SpriteAsset.class), 12, 17, 2f),
+            new Animation("idle_front", AssetManager.get("mapPlayer", SpriteAsset.class), 0, 0, 1f),
+            new Animation("idle_side", AssetManager.get("mapPlayer", SpriteAsset.class), 2, 2, 2f),
+            new Animation("idle_back", AssetManager.get("mapPlayer", SpriteAsset.class), 1, 1, 2f),
 
-            new Animation("walk_front", AssetManager.get("mapPlayer", SpriteAsset.class), 18, 23, 1f),
-            new Animation("walk_side", AssetManager.get("mapPlayer", SpriteAsset.class), 24, 29, 1f),
-            new Animation("walk_back", AssetManager.get("mapPlayer", SpriteAsset.class), 30, 35, 1f),
+            new Animation("walk_front", AssetManager.get("mapPlayer", SpriteAsset.class), 0, 0, 1f),
+            new Animation("walk_side", AssetManager.get("mapPlayer", SpriteAsset.class), 2, 2, 1f),
+            new Animation("walk_back", AssetManager.get("mapPlayer", SpriteAsset.class), 1, 1, 1f),
 
             new Animator("idle_front"),
 

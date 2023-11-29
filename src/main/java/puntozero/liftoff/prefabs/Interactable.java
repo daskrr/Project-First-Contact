@@ -134,9 +134,9 @@ public class Interactable extends GameObject
         return new PXPSingleEvent<>() {
             @Override
             public void invoke(MouseEvent mouseEvent) {
-                if (mouseEvent.getButton() != PConstants.RIGHT) return;
+            if (mouseEvent.getButton() != PConstants.RIGHT) return;
 
-                canInteract = true;
+            canInteract = true;
             }
         };
     }

@@ -64,7 +64,9 @@ public class DiningRoomScene extends Scene {
                 add(() -> new Interactable("chairRight",
                     new Vector2(),
                     new Vector2(1.6f, 1.6f),
-                    new Image(AssetManager.get("chairRight", SpriteAsset.class)),
+                    new Image(AssetManager.get("chairRight", SpriteAsset.class)) {{
+                        color = new Color(255,255,255,0);
+                    }},
                     scene.climbChair("chairRight"),
                     true)
                 {{
@@ -89,22 +91,33 @@ public class DiningRoomScene extends Scene {
                     new Image(AssetManager.get("plate", SpriteAsset.class)),
                     scene.dropPlate())
                 {{
-                    transform = new Transform(new Vector2(-1.5f, -.05f));
+                    transform = new Transform(new Vector2(-1.5f, -.65f));
                 }});
             else
                 suppliers.add(() -> new GameObject("plate", new Component[] {
-                    new SpriteRenderer(AssetManager.get("plate", SpriteAsset.class))
+                    new SpriteRenderer(AssetManager.get("brokenPlate", SpriteAsset.class))
                 }) {{
                     transform = new Transform(new Vector2(-1.5f, 6.75f));
                 }});
 
             if (kid)
                 suppliers.add(() -> new GameObject("kid", new Component[] {
-                    new SpriteRenderer(AssetManager.getSpriteFromSheet("levelPlayer", 20))
+                    new SpriteRenderer(AssetManager.get("kid", SpriteAsset.class))
                 })
                 {{
-                    transform = new Transform(new Vector2(1.2f, 1f));
+                    transform = new Transform(new Vector2(2.5f, 3f));
                 }});
+
+            suppliers.add(() -> new GameObject("light", new Component[] {
+                new SpriteRenderer(AssetManager.get("diningLight", SpriteAsset.class)) {{
+                    setSortingLayer("Light");
+                }}
+            }));
+            suppliers.add(() -> new GameObject("foreground", new Component[] {
+                new SpriteRenderer(AssetManager.get("diningForeground", SpriteAsset.class)) {{
+                    setSortingLayer("Foreground");
+                }}
+            }));
 
             return suppliers.toArray(new GameObjectSupplier[0]);
         }
@@ -167,14 +180,13 @@ public class DiningRoomScene extends Scene {
                 plate.destroy();
 
                 addGameObject(new GameObject("plate", new Component[] {
-                    new SpriteRenderer(AssetManager.get("plate", SpriteAsset.class))
+                    new SpriteRenderer(AssetManager.get("brokenPlate", SpriteAsset.class))
                 }) {{
                     transform = new Transform(new Vector2(-1.5f, 6.75f));
                 }});
 
                 state.plate = false;
 
-                // TODO trigger adult
                 levelPlayer.controller.setLocked(true);
 
                 TextBox text = new TextBox(
@@ -238,7 +250,7 @@ public class DiningRoomScene extends Scene {
                 addGameObject(new GameObject("adult", new Component[] {
                     new SpriteRenderer(AssetManager.get("adult", SpriteAsset.class))
                 }) {{
-                    transform = new Transform(new Vector2(13f, 5f));
+                    transform = new Transform(new Vector2(12.5f, 3f));
                 }});
             }
         };

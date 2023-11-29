@@ -35,7 +35,7 @@ public class Monologue extends GameObject
                     new Vector2(0, 300f),
                     new Vector3(),
                     new Vector2(1,1),
-                    new Vector2(400, 150)
+                    new Vector2(800, 150)
                 );
             }},
             // had to place this outside of the wrapper, as the text makes the background transparent????
@@ -51,7 +51,7 @@ public class Monologue extends GameObject
                     new Vector2(0, 300f),
                     new Vector3(),
                     new Vector2(1,1),
-                    new Vector2(-1f, -1f)
+                    new Vector2(700f, -1f)
                 );
             }}
         });
