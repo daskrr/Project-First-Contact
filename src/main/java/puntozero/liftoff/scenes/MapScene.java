@@ -60,7 +60,7 @@ public class MapScene extends Scene
             () -> new Door(SceneIndex.DINING_ROOM.index, new Vector2(-6.8f, -.95f), onClick(SceneIndex.DINING_ROOM.index)),
 
             // right top door
-            () -> new Door(0, new Vector2(6.65f, -.95f), onClick(0)),
+            () -> new Door(SceneIndex.STORAGE_ROOM.index, new Vector2(6.65f, -.95f), onClick(SceneIndex.STORAGE_ROOM.index)),
 
             () -> new MapPlayer(new Vector2(1.2f,2f)),
             () -> new GameObject("adult", new Component[] {

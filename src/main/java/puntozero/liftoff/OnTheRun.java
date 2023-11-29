@@ -16,7 +16,7 @@ import pxp.util.Pair;
 
 import java.util.ArrayList;
 
-public class Liftoff extends Game
+public class OnTheRun extends Game
 {
     @Override
     public GameSettings startup() {
@@ -172,6 +172,6 @@ public class Liftoff extends Game
 
     // we need to start the game somehow, right?
     public static void main(String[] args) {
-        new Liftoff();
+        new OnTheRun();
     }
 }
