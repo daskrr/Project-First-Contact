@@ -1,11 +1,11 @@
 package puntozero.liftoff.scenes.minigame;
 
+import puntozero.liftoff.components.PlayerInventory;
+import puntozero.liftoff.data.SceneIndex;
+import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.prefabs.Pot;
 import puntozero.liftoff.prefabs.PotSlot;
-import pxp.engine.core.GameObject;
-import pxp.engine.core.RectTransform;
-import pxp.engine.core.Scene;
-import pxp.engine.core.Transform;
+import pxp.engine.core.*;
 import pxp.engine.core.component.Camera;
 import pxp.engine.core.component.Component;
 import pxp.engine.core.component.SpriteRenderer;
@@ -67,6 +67,38 @@ public class PotsScene extends Scene
                 }) {{
                     transform = new RectTransform(
                         new Vector2(0,-220f),
+                        new Vector3(0,0,0),
+                        new Vector2(1,1),
+                        new Vector2(-1f, -1f),
+                        Anchor.CENTER
+                    );
+                }},
+                new GameObject("timer", new Component[] {
+                    new Text("20") {{
+                        color = Color.white();
+                        fontSize = 17;
+                        font = AssetManager.get("PressStart", FontAsset.class);
+                    }},
+                    new Component() {
+                        private int time = 20;
+                        @Override
+                        public void start() {
+                            Text text = getComponentOfType(Text.class);
+                            Routine routine = ctx().runInterval(this.gameObject, 1f, () -> {
+                                time--;
+                                text.setText(String.valueOf(time));
+                            });
+
+                            ctx().runLater(this.gameObject, 21f, () -> {
+                                routine.stop();
+                                PlayerInventory.addItem(ItemRegistry.POT.item);
+                                ctx().setScene(SceneIndex.KITCHEN.index);
+                            });
+                        }
+                    }
+                }) {{
+                    transform = new RectTransform(
+                        new Vector2(600f,-350f),
                         new Vector3(0,0,0),
                         new Vector2(1,1),
                         new Vector2(-1f, -1f),

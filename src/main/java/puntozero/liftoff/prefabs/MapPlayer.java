@@ -20,7 +20,7 @@ public class MapPlayer extends GameObject
 
         this.setComponents(new Component[] {
             new SpriteRenderer(){{
-                sortingLayer = "Default";
+                sortingLayer = "Player";
                 pivot = Pivot.CENTER;
             }},
             new Animation("idle_front", AssetManager.get("mapPlayer", SpriteAsset.class), 0, 5, 2f),
@@ -33,16 +33,13 @@ public class MapPlayer extends GameObject
 
             new Animator("idle_front"),
 
-            new CircleCollider(new Vector2(0,.85f), .2f) {{
-                drawGizmos = true;
-            }},
+            new CircleCollider(new Vector2(0,.85f), .2f),
 
             this.controller
         });
         this.setChildren(new GameObject[] {
             new GameObject("playerTrigger", new Component[] {
                 new CircleCollider(new Vector2(0,.85f), .2f) {{
-                    drawGizmos = true;
                     trigger = true;
                 }},
                 new MapPlayerTrigger(this.controller)

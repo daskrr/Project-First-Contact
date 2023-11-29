@@ -3,6 +3,7 @@ package puntozero.liftoff;
 import puntozero.liftoff.manager.SceneStateManager;
 import puntozero.liftoff.scenes.*;
 import puntozero.liftoff.scenes.minigame.BooksScene;
+import puntozero.liftoff.scenes.minigame.KeysMinigame;
 import puntozero.liftoff.scenes.minigame.PotsScene;
 import pxp.engine.core.Game;
 import pxp.engine.core.Scene;
@@ -73,16 +74,28 @@ public class Liftoff extends Game
         AssetManager.createSprite("chairLeft", "diningRoom/chair_left.png", 16);
         AssetManager.createSprite("chairRight", "diningRoom/chair_right.png", 16);
         AssetManager.createSprite("plate", "diningRoom/plate.png", 16);
+        AssetManager.createSprite("adult", "diningRoom/adult.png", 16);
 
         // items
         AssetManager.createSprite("item_matchBox", "items/matchBox.png", 16);
         AssetManager.createSprite("item_pot", "items/pot.png", 16);
         AssetManager.createSprite("item_napkin", "items/napkin.png", 16);
         AssetManager.createSprite("item_note", "items/note.png", 16);
+        AssetManager.createSprite("item_keys", "keys/key_green.png", 16);
+
+        // keys
+        AssetManager.createSprite("keys/A", "keys/A.png", 16);
+        AssetManager.createSprite("keys/B", "keys/B.png", 16);
+        AssetManager.createSprite("keys/C", "keys/C.png", 16);
+        AssetManager.createSprite("keys/green", "keys/key_green.png", 16);
+        AssetManager.createSprite("keys/orange", "keys/key_orange.png", 16);
+        AssetManager.createSprite("keys/purple", "keys/key_purple.png", 16);
+        AssetManager.createSprite("keys/hole", "keys/key_hole.png", 16);
 
         // player
         AssetManager.createSpriteSheet("levelPlayer", "level_player.png", 16, 6, 15);
         AssetManager.createSpriteSheet("mapPlayer", "map_player.png", 16, 10, 6);
+        AssetManager.createSprite("mapAdult", "adultMap.png", 16);
 
         // font
         AssetManager.createFont("PressStart", new FontAsset("fonts/PressStart2P-Regular.ttf", null,null,null, 40, true));
@@ -141,8 +154,8 @@ public class Liftoff extends Game
             new PotsScene(),
             new LibraryScene(),
             new BooksScene(),
-            new DiningRoomScene()
-//                new LevelTestScene()
+            new DiningRoomScene(),
+            new KeysMinigame()
         };
     }
 

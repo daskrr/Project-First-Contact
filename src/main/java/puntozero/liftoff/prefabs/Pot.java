@@ -90,6 +90,8 @@ public class Pot extends GameObject
 
             PlayerInventory.addItem(ItemRegistry.POT.item);
             ctx().setScene(SceneIndex.KITCHEN.index);
+            GameObject timer = ctx().getCurrentScene().getGameObjectDeep("timer");
+            ctx().removeAllRoutines(timer);
         }
 
         private boolean isHovering = false;

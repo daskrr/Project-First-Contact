@@ -36,9 +36,9 @@ public class LibraryScene extends Scene
                 add(() -> new GameObject("camera", new Component[] {
                     new Camera(8f)
                 }));
-                add(() -> new GameObject("background", new Component[] {
-                    new SpriteRenderer(AssetManager.get("libraryBackground", SpriteAsset.class))
-                }));
+//                add(() -> new GameObject("background", new Component[] {
+//                    new SpriteRenderer(AssetManager.get("libraryBackground", SpriteAsset.class))
+//                }));
                 add(() -> new Exit(new Vector2(13f, 0f)));
                 add(() -> new LevelPlayer() {{
                     transform = new Transform(new Vector2(13f, 5f));
@@ -60,7 +60,7 @@ public class LibraryScene extends Scene
         }
     }
 
-    private final LibrarySceneState state;
+    private LibrarySceneState state;
 
     public LibraryScene() {
         super();
@@ -73,6 +73,7 @@ public class LibraryScene extends Scene
     @Override
     public void load() {
         // we need to reset the game object suppliers when the scene is loaded again, in order to preserve state
+        this.state = SceneStateManager.getInstance().get(this, new LibrarySceneState());
         this.setGameObjects(state.restoreSceneState(this));
         super.load();
     }

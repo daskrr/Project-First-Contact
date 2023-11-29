@@ -116,7 +116,7 @@ public class KitchenScene extends Scene
         }
     }
 
-    private final KitchenSceneState state;
+    private KitchenSceneState state;
 
     public KitchenScene() {
         super();
@@ -129,6 +129,7 @@ public class KitchenScene extends Scene
     @Override
     public void load() {
         // we need to reset the game object suppliers when the scene is loaded again, in order to preserve state
+        this.state = SceneStateManager.getInstance().get(this, new KitchenSceneState());
         this.setGameObjects(state.restoreSceneState(this));
         super.load();
     }

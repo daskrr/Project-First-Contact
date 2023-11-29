@@ -1,6 +1,8 @@
 package puntozero.liftoff.scenes;
 
+import processing.event.MouseEvent;
 import puntozero.liftoff.components.PlayerInventory;
+import puntozero.liftoff.data.SceneIndex;
 import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
@@ -12,11 +14,14 @@ import pxp.engine.core.component.Camera;
 import pxp.engine.core.component.Component;
 import pxp.engine.core.component.SpriteRenderer;
 import pxp.engine.core.component.ui.Image;
+import pxp.engine.data.Color;
 import pxp.engine.data.GameObjectSupplier;
 import pxp.engine.data.Vector2;
 import pxp.engine.data.assets.AssetManager;
+import pxp.engine.data.assets.FontAsset;
 import pxp.engine.data.assets.SpriteAsset;
 import pxp.engine.data.event.PXPEvent;
+import pxp.engine.data.event.PXPSingleEvent;
 import pxp.logging.Debug;
 
 import java.util.ArrayList;
@@ -27,6 +32,7 @@ public class DiningRoomScene extends Scene {
 
         public boolean napkin = true;
         public boolean plate = true;
+        public boolean kid = true;
         public boolean isOnChair = false;
         public float defaultY = 0f;
 
@@ -46,15 +52,15 @@ public class DiningRoomScene extends Scene {
                     transform = new Transform(new Vector2(13f, 5f));
                 }});
                 add(PlayerInventory::create);
-                add(() -> new Interactable("chairLeft",
-                    new Vector2(),
-                    new Vector2(1.6f, 1.6f),
-                    new Image(AssetManager.get("chairLeft", SpriteAsset.class)),
-                    scene.climbChair("chairLeft"),
-                    true)
-                {{
-                    transform = new Transform(new Vector2(-11.7f,5.35f));
-                }});
+//                add(() -> new Interactable("chairLeft",
+//                    new Vector2(),
+//                    new Vector2(1.6f, 1.6f),
+//                    new Image(AssetManager.get("chairLeft", SpriteAsset.class)),
+//                    scene.climbChair("chairLeft"),
+//                    true)
+//                {{
+//                    transform = new Transform(new Vector2(-11.7f,5.35f));
+//                }});
                 add(() -> new Interactable("chairRight",
                     new Vector2(),
                     new Vector2(1.6f, 1.6f),
@@ -76,24 +82,35 @@ public class DiningRoomScene extends Scene {
                     transform = new Transform(new Vector2(-12.9f, 1.2f));
                 }});
 
-            Vector2[] platePosition = new Vector2[] { new Vector2(-1.5f, -.05f) };
-            if (!plate)
-                platePosition[0] = new Vector2(-1.5f, 4.05f);
+            if (plate)
+                suppliers.add(() -> new Interactable("plate",
+                    new Vector2(),
+                    new Vector2(1.6f, 1.6f),
+                    new Image(AssetManager.get("plate", SpriteAsset.class)),
+                    scene.dropPlate())
+                {{
+                    transform = new Transform(new Vector2(-1.5f, -.05f));
+                }});
+            else
+                suppliers.add(() -> new GameObject("plate", new Component[] {
+                    new SpriteRenderer(AssetManager.get("plate", SpriteAsset.class))
+                }) {{
+                    transform = new Transform(new Vector2(-1.5f, 6.75f));
+                }});
 
-            suppliers.add(() -> new Interactable("plate",
-                new Vector2(),
-                new Vector2(1.6f, 1.6f),
-                new Image(AssetManager.get("plate", SpriteAsset.class)),
-                scene.dropPlate())
-            {{
-                transform = new Transform(platePosition[0]);
-            }});
+            if (kid)
+                suppliers.add(() -> new GameObject("kid", new Component[] {
+                    new SpriteRenderer(AssetManager.getSpriteFromSheet("levelPlayer", 20))
+                })
+                {{
+                    transform = new Transform(new Vector2(1.2f, 1f));
+                }});
 
             return suppliers.toArray(new GameObjectSupplier[0]);
         }
     }
 
-    private final DiningRoomState state;
+    private DiningRoomState state;
     public DiningRoomScene(){
         super();
 
@@ -104,6 +121,7 @@ public class DiningRoomScene extends Scene {
     @Override
     public void load() {
         // we need to reset the game object suppliers when the scene is loaded again, in order to preserve state
+        this.state = SceneStateManager.getInstance().get(this, new DiningRoomState());
         this.setGameObjects(state.restoreSceneState(this));
         super.load();
 
@@ -139,18 +157,89 @@ public class DiningRoomScene extends Scene {
             @Override
             public void invoke() {
                 // only do this when standing on chair
-                if (state.isOnChair){
-                    GameObject plate = getGameObject("plate");
-                    //TODO: do I need this here?
-//                    LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
+                if (!state.isOnChair) return;
+
+                GameObject plate = getGameObject("plate");
+                //TODO: do I need this here?
+                LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
 //                    levelPlayer.controller.destination = levelPlayer.transform.position;
 
-                    plate.transform.position = new Vector2(-1.5f, 6.75f);
+                plate.destroy();
 
-                    state.plate = false;
+                addGameObject(new GameObject("plate", new Component[] {
+                    new SpriteRenderer(AssetManager.get("plate", SpriteAsset.class))
+                }) {{
+                    transform = new Transform(new Vector2(-1.5f, 6.75f));
+                }});
 
-                    // TODO trigger adult
-                }
+                state.plate = false;
+
+                // TODO trigger adult
+                levelPlayer.controller.setLocked(true);
+
+                TextBox text = new TextBox(
+                    "Who threw the plate on the ground?",
+                    17,
+                    new Vector2(700,200),
+                    new Color(30, 32, 36, 240),
+                    AssetManager.get("PressStart", FontAsset.class),
+                    Color.white()
+                );
+                addGameObject(text);
+                text.remove(3f);
+
+                context.runLater(text, 3f, () -> {
+                    TextBox choice = new TextBox(
+                        "Make a choice:",
+                        17,
+                        new Vector2(800,300),
+                        new Color(30, 32, 36, 240),
+                        AssetManager.get("PressStart", FontAsset.class),
+                        Color.white()
+                    );
+                    choice.setOptions("Take the blame", "Blame the other kid");
+                    choice.setOptionCallbacks(new PXPSingleEvent<>() {
+                        @Override
+                        public void invoke(MouseEvent mouseEvent) {
+                            // GAME RESET
+                            DeathScreen deathScreen = new DeathScreen("You were sent to the discipline room...", new PXPEvent() {
+                                @Override
+                                public void invoke() {
+                                    SceneStateManager.getInstance().reset();
+                                }
+                            });
+                            addGameObject(deathScreen);
+                            choice.destroy();
+                        }
+                    }, new PXPSingleEvent<>() {
+                        @Override
+                        public void invoke(MouseEvent mouseEvent) {
+                            // BLACK SCREEN
+                            SceneStateManager.getInstance().disciplineUnlocked = true;
+
+                            DeathScreen deathScreen = new DeathScreen("They probably went to the discipline room...", new PXPEvent() {
+                                @Override
+                                public void invoke() {
+                                    // context.setScene(SceneIndex.MAP.index);
+                                    getGameObject("deathScreen").destroy();
+                                    getGameObject("adult").destroy();
+                                    getGameObject("kid").destroy();
+                                    state.kid = false;
+                                }
+                            });
+                            addGameObject(deathScreen);
+                            choice.destroy();
+                        }
+                    });
+                    choice.refresh();
+                    addGameObject(choice);
+                });
+
+                addGameObject(new GameObject("adult", new Component[] {
+                    new SpriteRenderer(AssetManager.get("adult", SpriteAsset.class))
+                }) {{
+                    transform = new Transform(new Vector2(13f, 5f));
+                }});
             }
         };
     }
@@ -160,7 +249,7 @@ public class DiningRoomScene extends Scene {
             @Override
             public void invoke() {
                 // only do this when standing on chair
-                if (state.isOnChair) {
+//                if (state.isOnChair) {
                     getGameObject("napkin").destroy();
                     //TODO: do I need this here?
 //                    LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
@@ -169,7 +258,7 @@ public class DiningRoomScene extends Scene {
                     state.napkin = false;
 
                     PlayerInventory.addItem(ItemRegistry.NAPKIN.item);
-                }
+//                }
             }
         };
     }

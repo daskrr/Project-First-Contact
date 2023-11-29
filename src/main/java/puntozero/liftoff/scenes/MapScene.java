@@ -1,6 +1,7 @@
 package puntozero.liftoff.scenes;
 
 import processing.event.MouseEvent;
+import puntozero.liftoff.components.AdultHandler;
 import puntozero.liftoff.components.MapPlayerController;
 import puntozero.liftoff.components.PlayerInventory;
 import puntozero.liftoff.data.SceneIndex;
@@ -11,10 +12,7 @@ import puntozero.liftoff.prefabs.Monologue;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.Scene;
 import pxp.engine.core.Transform;
-import pxp.engine.core.component.BoxCollider;
-import pxp.engine.core.component.Camera;
-import pxp.engine.core.component.Component;
-import pxp.engine.core.component.SpriteRenderer;
+import pxp.engine.core.component.*;
 import pxp.engine.data.GameObjectSupplier;
 import pxp.engine.data.Vector2;
 import pxp.engine.data.assets.AssetManager;
@@ -65,6 +63,13 @@ public class MapScene extends Scene
             () -> new Door(0, new Vector2(6.65f, -.95f), onClick(0)),
 
             () -> new MapPlayer(new Vector2(1.2f,2f)),
+            () -> new GameObject("adult", new Component[] {
+                new SpriteRenderer(AssetManager.get("mapAdult", SpriteAsset.class)),
+                new AdultHandler(),
+                new CircleCollider(new Vector2(0,.1f), .3f)
+            }) {{
+                transform = new Transform(new Vector2(1.2f, -3f));
+            }},
 
             PlayerInventory::create
         };
@@ -101,9 +106,22 @@ public class MapScene extends Scene
                         context.setScene(mapPlayer.controller.doorIndex);
                     }
                     else {
-                        Monologue monologue = new Monologue("I can't go there yet...");
-                        addGameObject(monologue);
-                        monologue.remove(3.5f);
+                        if (index == SceneIndex.LIBRARY.index) {
+                            if (PlayerInventory.hasItem("keys")) {
+                                SceneStateManager.getInstance().mapPlayerPosition = mapPlayer.transform.position;
+                                context.setScene(SceneIndex.KEYS.index);
+                            }
+                            else {
+                                Monologue monologue = new Monologue("Oh, the library is locked.\nWhere can I find the key?\nThe adults always carry them in their pockets…");
+                                addGameObject(monologue);
+                                monologue.remove(3.5f);
+                            }
+                        }
+                        else {
+                            Monologue monologue = new Monologue("Mh..locked...Noone misbehaved today so the discipline room is locked.");
+                            addGameObject(monologue);
+                            monologue.remove(3.5f);
+                        }
                     }
                 }
             }

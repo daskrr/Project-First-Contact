@@ -39,9 +39,22 @@ public class MapPlayerTrigger extends Component
                 ctx().setScene(controller.doorIndex);
             }
             else {
-                Monologue monologue = new Monologue("I can't go there yet...");
-                instantiate(monologue);
-                monologue.remove(3.5f);
+                if (door.index == SceneIndex.LIBRARY.index) {
+                    if (PlayerInventory.hasItem("keys")) {
+                        SceneStateManager.getInstance().mapPlayerPosition = controller.transform().position;
+                        ctx().setScene(SceneIndex.KEYS.index);
+                    }
+                    else {
+                        Monologue monologue = new Monologue("Oh, the library is locked.\nWhere can I find the key?\nThe adults always carry them in their pockets…");
+                        instantiate(monologue);
+                        monologue.remove(3.5f);
+                    }
+                }
+                else {
+                    Monologue monologue = new Monologue("Mh..locked...Noone misbehaved today so the discipline room is locked.");
+                    instantiate(monologue);
+                    monologue.remove(3.5f);
+                }
             }
         }
     }

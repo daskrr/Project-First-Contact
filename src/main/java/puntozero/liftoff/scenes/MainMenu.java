@@ -73,21 +73,23 @@ public class MainMenu extends Scene
     }
 
     private GameObject createButton(String text, Vector2 position, PXPSingleEvent<MouseEvent> onClickEvent) {
+        Text textUI = new Text(text, Pivot.CENTER) {{
+            font = AssetManager.get("PressStart", FontAsset.class);
+            fontSize = 30;
+            color = Color.white();
+        }};
         return new GameObject("button", new Component[] {
             new Button(InteractableTransition.COLOR) {{
                 onClick = onClickEvent;
                 color = Color.white();
+                targetGraphic = textUI;
                 normalColor = Color.white();
-                hoverColor = new Color(240,240,240,255);
-                pressedColor = new Color(230,230,230,255);
+                hoverColor = new Color(199,199,199,255);
+                pressedColor = new Color(170,170,170,255);
             }}
         }, new GameObject[] {
             new GameObject("buttonText", new Component[] {
-                new Text(text, Pivot.CENTER) {{
-                    font = AssetManager.get("PressStart", FontAsset.class);
-                    fontSize = 30;
-                    color = Color.white();
-                }}
+                textUI
             }) {{
                 transform = new RectTransform(
                     new Vector2(0, 40f), // for some reason it's not centering properly, fuck if I know
