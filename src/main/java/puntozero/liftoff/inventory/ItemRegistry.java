@@ -5,9 +5,18 @@ import pxp.engine.data.assets.SpriteAsset;
 
 public enum ItemRegistry
 {
-    MATCHES(new InventoryItem("matchBox", AssetManager.get("item_matchBox", SpriteAsset.class))),
-    POT(new InventoryItem("pot", AssetManager.get("item_pot", SpriteAsset.class))),
-    BOOK(new InventoryItem("book", AssetManager.get("book5", SpriteAsset.class)));
+    MATCHES(new InventoryItem("matchBox", "Match Box", AssetManager.get("item_matchBox", SpriteAsset.class))),
+    POT(new InventoryItem("pot", "Pot", AssetManager.get("item_pot", SpriteAsset.class))),
+    BOOK_GREEN(new InventoryItem("bookGreen", "Book", AssetManager.get("book_item1", SpriteAsset.class))),
+    BOOK_PURPLE(new InventoryItem("bookPurple", "Book", AssetManager.get("book_item2", SpriteAsset.class))),
+    BOOK_PINK(new InventoryItem("bookPink", "Book", AssetManager.get("book_item3", SpriteAsset.class))),
+    BOOK_BLUE(new InventoryItem("bookBlue", "Book", AssetManager.get("book_item4", SpriteAsset.class))),
+    BOOK_ORANGE(new InventoryItem("bookOrange", "Book", AssetManager.get("book_item5", SpriteAsset.class))),
+    BOOK_RED(new InventoryItem("bookRed", "Book", AssetManager.get("book_item6", SpriteAsset.class))),
+    NAPKIN(new InventoryItem("napkin", "Napkin", AssetManager.get("item_napkin", SpriteAsset.class))),
+    NOTE(new InventoryItem("note", "Note", AssetManager.get("item_note", SpriteAsset.class))),
+    KEYS(new InventoryItem("keys", "Key Chain", AssetManager.get("item_keys", SpriteAsset.class)));
+
 
     public final InventoryItem item;
     ItemRegistry(InventoryItem item) {

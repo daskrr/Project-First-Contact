@@ -3,6 +3,7 @@ package puntozero.liftoff;
 import puntozero.liftoff.manager.SceneStateManager;
 import puntozero.liftoff.scenes.*;
 import puntozero.liftoff.scenes.minigame.BooksScene;
+import puntozero.liftoff.scenes.minigame.KeysMinigame;
 import puntozero.liftoff.scenes.minigame.PotsScene;
 import pxp.engine.core.Game;
 import pxp.engine.core.Scene;
@@ -15,7 +16,7 @@ import pxp.util.Pair;
 
 import java.util.ArrayList;
 
-public class Liftoff extends Game
+public class OnTheRun extends Game
 {
     @Override
     public GameSettings startup() {
@@ -33,10 +34,12 @@ public class Liftoff extends Game
         AssetManager.createSprite("blank", "blank.png", 1);
         AssetManager.createSprite("exit", "exit.png", 16);
         AssetManager.createSprite("circle", "circle.png", 1000);
+        AssetManager.createSprite("inventoryBackground", "inventoryBackground.png", 100);
 
         // kitchen
         AssetManager.createSprite("kitchenBackground", "kitchen/background.png", 16);
         AssetManager.createSprite("kitchenLight", "kitchen/light.png", 16);
+        AssetManager.createSprite("kitchenForeground", "kitchen/foreground.png", 16);
         AssetManager.createSprite("doorLeft", "kitchen/door_left.png", 16);
         AssetManager.createSprite("doorRight", "kitchen/door_right.png", 16);
         AssetManager.createSprite("drawerRight", "kitchen/drawer_right.png", 16);
@@ -51,21 +54,57 @@ public class Liftoff extends Game
         AssetManager.createSprite("potSlot", "kitchen/pot_slot.png", 16);
 
         // library
-        AssetManager.createSprite("libraryBackground", "library/background.jpg", 150);
-        AssetManager.createSprite("book1", "library/book1.png", 150);
-        AssetManager.createSprite("book2", "library/book2.png", 150);
-        AssetManager.createSprite("book3", "library/book3.png", 150);
-        AssetManager.createSprite("book4", "library/book4.png", 150);
-        AssetManager.createSprite("book5", "library/book5.png", 150);
-        AssetManager.createSprite("book6", "library/book6.png", 150);
+        AssetManager.createSprite("libraryBackground", "library/background.png", 16);
+        AssetManager.createSprite("libraryLight", "library/light.png", 16);
+        AssetManager.createSprite("libraryForeground", "library/foreground.png", 16);
+        AssetManager.createSprite("book1", "library/book1.png", 16);
+        AssetManager.createSprite("book2", "library/book2.png", 16);
+        AssetManager.createSprite("book3", "library/book3.png", 16);
+        AssetManager.createSprite("book4", "library/book4.png", 16);
+        AssetManager.createSprite("book5", "library/book5.png", 16);
+        AssetManager.createSprite("book6", "library/book6.png", 16);
+        AssetManager.createSprite("books", "library/books.png", 16);
+
+        // book items
+        AssetManager.createSprite("book_item1", "library/book_item1.png", 16);
+        AssetManager.createSprite("book_item2", "library/book_item2.png", 16);
+        AssetManager.createSprite("book_item3", "library/book_item3.png", 16);
+        AssetManager.createSprite("book_item4", "library/book_item4.png", 16);
+        AssetManager.createSprite("book_item5", "library/book_item5.png", 16);
+        AssetManager.createSprite("book_item6", "library/book_item6.png", 16);
+
+        // dining room
+        AssetManager.createSprite("diningBackground", "diningRoom/background.png", 16);
+        AssetManager.createSprite("diningLight", "diningRoom/light.png", 16);
+        AssetManager.createSprite("diningForeground", "diningRoom/foreground.png", 16);
+        AssetManager.createSprite("napkin", "diningRoom/napkin.png", 16);
+        AssetManager.createSprite("chairLeft", "diningRoom/chair_left.png", 16);
+        AssetManager.createSprite("chairRight", "diningRoom/chair_right.png", 16);
+        AssetManager.createSprite("plate", "items/plate.png", 16);
+        AssetManager.createSprite("brokenPlate", "items/broken_plate.png", 16);
+        AssetManager.createSprite("adult", "diningRoom/adult.png", 16);
+        AssetManager.createSprite("kid", "diningRoom/boy.png", 16);
 
         // items
         AssetManager.createSprite("item_matchBox", "items/matchBox.png", 16);
         AssetManager.createSprite("item_pot", "items/pot.png", 16);
+        AssetManager.createSprite("item_napkin", "items/napkin.png", 16);
+        AssetManager.createSprite("item_note", "items/note.png", 16);
+        AssetManager.createSprite("item_keys", "items/keys.png", 16);
+
+        // keys
+        AssetManager.createSprite("keys/A", "keys/A.png", 16);
+        AssetManager.createSprite("keys/B", "keys/B.png", 16);
+        AssetManager.createSprite("keys/C", "keys/C.png", 16);
+        AssetManager.createSprite("keys/green", "keys/key_green.png", 16);
+        AssetManager.createSprite("keys/orange", "keys/key_orange.png", 16);
+        AssetManager.createSprite("keys/purple", "keys/key_purple.png", 16);
+        AssetManager.createSprite("keys/hole", "keys/key_hole.png", 16);
 
         // player
-        AssetManager.createSpriteSheet("levelPlayer", "level_player.png", 16, 6, 15);
-        AssetManager.createSpriteSheet("mapPlayer", "map_player.png", 16, 10, 6);
+        AssetManager.createSprite("levelPlayer", "level_player.png", 16);
+        AssetManager.createSpriteSheet("mapPlayer", "map_player.png", 16, 1, 3);
+        AssetManager.createSprite("mapAdult", "adultMap.png", 16);
 
         // font
         AssetManager.createFont("PressStart", new FontAsset("fonts/PressStart2P-Regular.ttf", null,null,null, 40, true));
@@ -81,7 +120,7 @@ public class Liftoff extends Game
             targetFPS = 140;
             background = new Color(0,0,0,255);
 
-            forceDrawGizmos = true;
+//            forceDrawGizmos = true;
 
             // the sorting layers need to contain "Default"
             // if they don't the "Default" layer will be placed automatically
@@ -91,7 +130,9 @@ public class Liftoff extends Game
                 "Objects",
                 "People",
                 "Player",
-                "Light"
+                "Light",
+                "Foreground",
+                "UI"
             };
             // the layers are used for collisions
             // all layers collide with one another
@@ -123,13 +164,14 @@ public class Liftoff extends Game
             new KitchenScene(),
             new PotsScene(),
             new LibraryScene(),
-            new BooksScene()
-//                new LevelTestScene()
+            new BooksScene(),
+            new DiningRoomScene(),
+            new KeysMinigame()
         };
     }
 
     // we need to start the game somehow, right?
     public static void main(String[] args) {
-        new Liftoff();
+        new OnTheRun();
     }
 }

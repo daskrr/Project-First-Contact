@@ -26,6 +26,8 @@ public class Interactable extends GameObject
     private final PXPEvent onInteract;
     private boolean canInteract = false;
 
+    public boolean interactImmediateAfterTrigger = false;
+
     private class InteractableHandler extends Component {
         private boolean interacted = false;
         @Override
@@ -35,6 +37,11 @@ public class Interactable extends GameObject
 
             onInteract.invoke();
             interacted = true;
+
+            if (interactImmediateAfterTrigger) {
+                canInteract = false;
+                interacted = false;
+            }
         }
         @Override
         public void triggerStay(Collider collider) {
@@ -45,6 +52,11 @@ public class Interactable extends GameObject
 
             onInteract.invoke();
             interacted = true;
+
+            if (interactImmediateAfterTrigger) {
+                canInteract = false;
+                interacted = false;
+            }
         }
         @Override
         public void triggerExit(Collider collider) {
@@ -72,10 +84,33 @@ public class Interactable extends GameObject
             Vector2 halfSize,
             Image image,
             PXPEvent onInteract,
+            boolean interactImmediateAfterTrigger) {
+        this(name, offset, halfSize, image, onInteract, new Component[0], new GameObject[0], interactImmediateAfterTrigger);
+    }
+
+    public Interactable(
+            String name,
+            Vector2 offset,
+            Vector2 halfSize,
+            Image image,
+            PXPEvent onInteract,
             Component[] components,
             GameObject[] children) {
+        this(name, offset, halfSize, image, onInteract, components, children, false);
+    }
+
+    public Interactable(
+            String name,
+            Vector2 offset,
+            Vector2 halfSize,
+            Image image,
+            PXPEvent onInteract,
+            Component[] components,
+            GameObject[] children,
+            boolean interactImmediateAfterTrigger) {
         super(name);
 
+        this.interactImmediateAfterTrigger = interactImmediateAfterTrigger;
         this.onInteract = onInteract;
 
         Component[] intComponents = new Component[] {
@@ -99,9 +134,9 @@ public class Interactable extends GameObject
         return new PXPSingleEvent<>() {
             @Override
             public void invoke(MouseEvent mouseEvent) {
-                if (mouseEvent.getButton() != PConstants.RIGHT) return;
+            if (mouseEvent.getButton() != PConstants.RIGHT) return;
 
-                canInteract = true;
+            canInteract = true;
             }
         };
     }

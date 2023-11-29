@@ -17,6 +17,8 @@ public class LevelPlayerController extends Component
     public Vector2 destination = null;
     private float directionX = 0;
 
+    private boolean locked = false;
+
     private SpriteRenderer renderer;
     private Animator animator;
 
@@ -28,8 +30,6 @@ public class LevelPlayerController extends Component
         this.renderer = getComponentOfType(SpriteRenderer.class);
         this.animator = getComponentOfType(Animator.class);
 
-        renderer.flipX = true;
-
         Vector2 position = SceneStateManager.getInstance().levelPlayerPosition;
         if (position != null)
             transform().position = position.clone();
@@ -37,6 +37,8 @@ public class LevelPlayerController extends Component
 
     @Override
     public void update() {
+        if (locked) return;
+
         if (Input.getMouseButtonClick(MouseButton.MB1) || Input.getMouseButtonClick(MouseButton.MB2)) {
             Vector2 worldPos = ctx().getCurrentScene().getCamera().screenToWorldPosition(Input.getMousePos());
             this.destination = worldPos;
@@ -65,9 +67,9 @@ public class LevelPlayerController extends Component
     private void checkLookingDirection() {
         boolean isFacingLeft;
         if (this.directionX > Float.MIN_VALUE)
-            isFacingLeft = false;
-        else
             isFacingLeft = true;
+        else
+            isFacingLeft = false;
 
         renderer.flipX = isFacingLeft;
     }
@@ -76,5 +78,12 @@ public class LevelPlayerController extends Component
         if (destination == null) return;
 
         this.directionX = destination.x - transform().position.x;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+
+        if (locked)
+            animator.play("idle");
     }
 }

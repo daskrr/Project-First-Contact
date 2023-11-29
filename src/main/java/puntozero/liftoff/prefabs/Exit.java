@@ -11,6 +11,7 @@ import pxp.engine.core.component.Component;
 import pxp.engine.core.component.ui.Button;
 import pxp.engine.core.component.ui.Canvas;
 import pxp.engine.core.component.ui.Image;
+import pxp.engine.data.Color;
 import pxp.engine.data.Vector2;
 import pxp.engine.data.Vector3;
 import pxp.engine.data.assets.AssetManager;
@@ -52,11 +53,14 @@ public class Exit extends GameObject
 
         Image image = new Image(AssetManager.get("exit", SpriteAsset.class)) {{
             color.setA(0);
+            setSortingLayer("UI");
         }};
         GameObject exitButton = createButton(image);
 
         this.setComponents(new Component[] {
-            new Canvas(RenderMode.WORLD),
+            new Canvas(RenderMode.WORLD) {{
+                setSortingLayer("UI");
+            }},
             new ExitHandler(exitButton, image),
             new BoxCollider(new Vector2(), new Vector2(1.5f, 8f)) {{
                 trigger = true;
@@ -85,6 +89,9 @@ public class Exit extends GameObject
         return new GameObject("exitButton", new Component[] {
                 new Button(InteractableTransition.COLOR) {{
                     targetImage = image;
+                    normalColor = Color.white();
+                    hoverColor = new Color(200,200,200);
+                    pressedColor = new Color(170,170,170);
                     onClick = onClickEvent;
                 }}
             }, new GameObject[] {

@@ -14,6 +14,7 @@ import pxp.engine.core.component.Camera;
 import pxp.engine.core.component.Component;
 import pxp.engine.core.component.SpriteRenderer;
 import pxp.engine.core.component.ui.Image;
+import pxp.engine.data.Color;
 import pxp.engine.data.GameObjectSupplier;
 import pxp.engine.data.Vector2;
 import pxp.engine.data.assets.AssetManager;
@@ -49,18 +50,31 @@ public class LibraryScene extends Scene
             if (minigame)
                 suppliers.add(() -> new Interactable("books",
                     new Vector2(),
-                    new Vector2(1.6f, 1.6f),
-                    new Image(AssetManager.get("doorLeft", SpriteAsset.class)),
+                    new Vector2(3.5f, 1f),
+                    new Image(AssetManager.get("books", SpriteAsset.class)) {{
+                        color = new Color(255,255,255,0);
+                    }},
                     scene.openMinigame())
                 {{
-                    transform = new Transform(new Vector2(-7.9f, 5.05f));
+                    transform = new Transform(new Vector2(-9.5f, 4.65f));
                 }});
+
+            suppliers.add(() -> new GameObject("light", new Component[] {
+                new SpriteRenderer(AssetManager.get("libraryLight", SpriteAsset.class)) {{
+                    setSortingLayer("Light");
+                }}
+            }));
+            suppliers.add(() -> new GameObject("foreground", new Component[] {
+                new SpriteRenderer(AssetManager.get("libraryForeground", SpriteAsset.class)) {{
+                    setSortingLayer("Foreground");
+                }}
+            }));
 
             return suppliers.toArray(new GameObjectSupplier[0]);
         }
     }
 
-    private final LibrarySceneState state;
+    private LibrarySceneState state;
 
     public LibraryScene() {
         super();
@@ -73,6 +87,7 @@ public class LibraryScene extends Scene
     @Override
     public void load() {
         // we need to reset the game object suppliers when the scene is loaded again, in order to preserve state
+        this.state = SceneStateManager.getInstance().get(this, new LibrarySceneState());
         this.setGameObjects(state.restoreSceneState(this));
         super.load();
     }
@@ -81,12 +96,15 @@ public class LibraryScene extends Scene
         return new PXPEvent() {
             @Override
             public void invoke() {
-                getGameObject("books").destroy(); // destroy since we don't want to be able to interact again
+                // we don't destroy as this minigame is replayable
+                // we need to check if the player has a book in their inventory
+                PlayerInventory.removeBooks();
 
                 LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
                 levelPlayer.controller.destination = levelPlayer.transform.position;
 
-                state.minigame = false;
+                // not needed anymore
+                //state.minigame = false;
 
                 // save position
                 SceneStateManager.getInstance().levelPlayerPosition = levelPlayer.transform.position;

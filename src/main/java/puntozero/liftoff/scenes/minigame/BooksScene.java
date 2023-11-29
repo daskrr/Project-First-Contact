@@ -65,7 +65,7 @@ public class BooksScene extends Scene
                     }}
                 }) {{
                     transform = new RectTransform(
-                        new Vector2(0,-120f),
+                        new Vector2(0,-135f),
                         new Vector3(0,0,0),
                         new Vector2(1,1),
                         new Vector2(-1f, -1f),
@@ -87,7 +87,7 @@ public class BooksScene extends Scene
             add(new Book(Book.Type.PURPLE, new Vector2(0, 0)));
             add(new Book(Book.Type.PINK, new Vector2(0, 0)));
             add(new Book(Book.Type.BLUE, new Vector2(0, 0)));
-            add(new Book(Book.Type.BLACK, new Vector2(0, 0)));
+            add(new Book(Book.Type.ORANGE, new Vector2(0, 0)));
             add(new Book(Book.Type.RED, new Vector2(0, 0)));
         }};
         Collections.shuffle(books);

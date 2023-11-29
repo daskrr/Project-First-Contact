@@ -1,2 +1,2 @@
 Manifest-Version: 0.0.0
-Main-Class: puntozero.liftoff.Liftoff
+Main-Class: puntozero.liftoff.OnTheRun

@@ -1,5 +1,8 @@
 package puntozero.liftoff.manager;
 
+import puntozero.liftoff.components.PlayerInventory;
+import puntozero.liftoff.prefabs.PotSlot;
+import pxp.engine.core.GameProcess;
 import pxp.engine.core.Scene;
 import pxp.engine.data.Vector2;
 
@@ -16,6 +19,11 @@ public class SceneStateManager
     public Map<Integer, SceneState> states = new HashMap<>();
     public Vector2 mapPlayerPosition = null;
     public Vector2 levelPlayerPosition = null;
+
+    public boolean libraryUnlocked = false;
+    public boolean disciplineUnlocked = false;
+
+    public boolean adult = true;
 
     public SceneStateManager() {
         if (instance == null)
@@ -37,5 +45,9 @@ public class SceneStateManager
         this.states.clear();
         this.mapPlayerPosition = null;
         this.levelPlayerPosition = null;
+        PlayerInventory.reset();
+        PotSlot.correctPots = 0;
+
+        GameProcess.getInstance().setScene(0);
     }
 }

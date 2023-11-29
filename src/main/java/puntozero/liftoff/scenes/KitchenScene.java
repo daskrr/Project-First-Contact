@@ -108,7 +108,12 @@ public class KitchenScene extends Scene
 
             suppliers.add(() -> new GameObject("light", new Component[] {
                 new SpriteRenderer(AssetManager.get("kitchenLight", SpriteAsset.class)) {{
-                    setSortingLayer("light");
+                    setSortingLayer("Light");
+                }}
+            }));
+            suppliers.add(() -> new GameObject("foreground", new Component[] {
+                new SpriteRenderer(AssetManager.get("kitchenForeground", SpriteAsset.class)) {{
+                    setSortingLayer("Foreground");
                 }}
             }));
 
@@ -116,7 +121,7 @@ public class KitchenScene extends Scene
         }
     }
 
-    private final KitchenSceneState state;
+    private KitchenSceneState state;
 
     public KitchenScene() {
         super();
@@ -129,6 +134,7 @@ public class KitchenScene extends Scene
     @Override
     public void load() {
         // we need to reset the game object suppliers when the scene is loaded again, in order to preserve state
+        this.state = SceneStateManager.getInstance().get(this, new KitchenSceneState());
         this.setGameObjects(state.restoreSceneState(this));
         super.load();
     }
@@ -157,7 +163,7 @@ public class KitchenScene extends Scene
             @Override
             public void invoke() {
                 TextBox text = new TextBox(
-                    "It's too heavy for you to open!",
+                    "I can't reach it!",
                     17,
                     new Vector2(600,200),
                     new Color(30, 32, 36, 240),

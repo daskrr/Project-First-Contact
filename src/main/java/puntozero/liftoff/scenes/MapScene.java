@@ -1,19 +1,18 @@
 package puntozero.liftoff.scenes;
 
 import processing.event.MouseEvent;
+import puntozero.liftoff.components.AdultHandler;
 import puntozero.liftoff.components.MapPlayerController;
 import puntozero.liftoff.components.PlayerInventory;
 import puntozero.liftoff.data.SceneIndex;
 import puntozero.liftoff.manager.SceneStateManager;
 import puntozero.liftoff.prefabs.Door;
 import puntozero.liftoff.prefabs.MapPlayer;
+import puntozero.liftoff.prefabs.Monologue;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.Scene;
 import pxp.engine.core.Transform;
-import pxp.engine.core.component.BoxCollider;
-import pxp.engine.core.component.Camera;
-import pxp.engine.core.component.Component;
-import pxp.engine.core.component.SpriteRenderer;
+import pxp.engine.core.component.*;
 import pxp.engine.data.GameObjectSupplier;
 import pxp.engine.data.Vector2;
 import pxp.engine.data.assets.AssetManager;
@@ -24,8 +23,6 @@ public class MapScene extends Scene
 {
     public MapScene() {
         super();
-
-
 
         GameObjectSupplier[] suppliers = new GameObjectSupplier[] {
             () -> new GameObject("camera", new Component[]{
@@ -53,19 +50,26 @@ public class MapScene extends Scene
                 transform = new Transform(new Vector2(0,0));
             }},
             // middle bottom door
-            () -> new Door(0, new Vector2(-1.4f, .95f), onClick(0)),
+            () -> new Door(SceneIndex.DISCIPLINE_ROOM.index, new Vector2(-1.4f, .95f), onClick(SceneIndex.DISCIPLINE_ROOM.index)),
             // left bottom door
             () -> new Door(SceneIndex.LIBRARY.index, new Vector2(-5.1f, .95f), onClick(SceneIndex.LIBRARY.index)),
 
             // middle top door
             () -> new Door(SceneIndex.KITCHEN.index, new Vector2(-2.9f, -.95f), onClick(SceneIndex.KITCHEN.index)),
             // left top door
-            () -> new Door(0, new Vector2(-6.8f, -.95f), onClick(0)),
+            () -> new Door(SceneIndex.DINING_ROOM.index, new Vector2(-6.8f, -.95f), onClick(SceneIndex.DINING_ROOM.index)),
 
             // right top door
-            () -> new Door(0, new Vector2(6.65f, -.95f), onClick(0)),
+            () -> new Door(SceneIndex.STORAGE_ROOM.index, new Vector2(6.65f, -.95f), onClick(SceneIndex.STORAGE_ROOM.index)),
 
             () -> new MapPlayer(new Vector2(1.2f,2f)),
+            () -> new GameObject("adult", new Component[] {
+                new SpriteRenderer(AssetManager.get("mapAdult", SpriteAsset.class)),
+                new AdultHandler(),
+                new CircleCollider(new Vector2(0,.1f), .3f)
+            }) {{
+                transform = new Transform(new Vector2(1.2f, -3f));
+            }},
 
             PlayerInventory::create
         };
@@ -86,8 +90,39 @@ public class MapScene extends Scene
 
                 // if the player is already near a door, go through it
                 if (mapPlayer.controller.isNearDoor && mapPlayer.controller.doorIndex == index) {
-                    SceneStateManager.getInstance().mapPlayerPosition = mapPlayer.transform.position;
-                    context.setScene(mapPlayer.controller.doorIndex);
+                    boolean canGo = true;
+
+                    // check if player can enter room
+                    if (index == SceneIndex.LIBRARY.index) {
+                        if (!SceneStateManager.getInstance().libraryUnlocked)
+                            canGo = false;
+                    }
+                    else if (index == SceneIndex.DISCIPLINE_ROOM.index)
+                        if (!SceneStateManager.getInstance().disciplineUnlocked)
+                            canGo = false;
+
+                    if (canGo) {
+                        SceneStateManager.getInstance().mapPlayerPosition = mapPlayer.transform.position;
+                        context.setScene(mapPlayer.controller.doorIndex);
+                    }
+                    else {
+                        if (index == SceneIndex.LIBRARY.index) {
+                            if (PlayerInventory.hasItem("keys")) {
+                                SceneStateManager.getInstance().mapPlayerPosition = mapPlayer.transform.position;
+                                context.setScene(SceneIndex.KEYS.index);
+                            }
+                            else {
+                                Monologue monologue = new Monologue("Oh, the library is locked.\nWhere can I find the key?\nThe adults always carry them in their pockets…");
+                                addGameObject(monologue);
+                                monologue.remove(5f);
+                            }
+                        }
+                        else {
+                            Monologue monologue = new Monologue("Mh... locked...\nNoone misbehaved today so\nthe discipline room is locked.");
+                            addGameObject(monologue);
+                            monologue.remove(3.5f);
+                        }
+                    }
                 }
             }
         };
