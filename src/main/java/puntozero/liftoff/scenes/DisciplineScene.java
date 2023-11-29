@@ -3,6 +3,7 @@ package puntozero.liftoff.scenes;
 import puntozero.liftoff.components.PlayerInventory;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
+import puntozero.liftoff.prefabs.AdultDeath;
 import puntozero.liftoff.prefabs.Exit;
 import puntozero.liftoff.prefabs.Interactable;
 import puntozero.liftoff.prefabs.LevelPlayer;
@@ -41,6 +42,7 @@ public class DisciplineScene extends Scene {
                 add(() -> new LevelPlayer() {{
                     transform = new Transform(new Vector2(13f, 5f));
                 }});
+                add(() -> new AdultDeath(new Vector2(-5f,4.5f)));
                 add(PlayerInventory::create);
             }};
 
@@ -48,10 +50,10 @@ public class DisciplineScene extends Scene {
                 suppliers.add(() -> new Interactable("key",
                         new Vector2(),
                         new Vector2(1.6f,1.6f),
-                        new Image(AssetManager.get("key", SpriteAsset.class)),
+                        new Image(AssetManager.get("coatKey", SpriteAsset.class)),
                         scene.takeKey("key"))
                 {{
-                    transform = new Transform(new Vector2(7f,4.2f));
+                    transform = new Transform(new Vector2(7f,2.93f));
                 }});
             }
             //TODO: If child comes to close to adult then reset the game
@@ -59,6 +61,12 @@ public class DisciplineScene extends Scene {
             suppliers.add(() -> new GameObject("light", new Component[] {
                     new SpriteRenderer(AssetManager.get("disciplineLight", SpriteAsset.class)) {{
                         setSortingLayer("light");
+                    }}
+            }));
+
+            suppliers.add(() -> new GameObject("foreground", new Component[] {
+                    new SpriteRenderer(AssetManager.get("disciplineForeground", SpriteAsset.class)) {{
+                        setSortingLayer("foreground");
                     }}
             }));
 
@@ -87,7 +95,10 @@ public class DisciplineScene extends Scene {
         //TODO: replace assets to Liftoff
         AssetManager.createSprite("disciplineBackground", "disciplineRoom/background.png", 16);
         AssetManager.createSprite("disciplineLight", "disciplineRoom/background_light.png", 16);
+        AssetManager.createSprite("disciplineForeground", "disciplineRoom/foreground.png", 16);
+
         AssetManager.createSprite("key", "disciplineRoom/key.png", 16);
+        AssetManager.createSprite("coatKey", "disciplineRoom/coat_key.png", 16);
     }
 
     @Override
