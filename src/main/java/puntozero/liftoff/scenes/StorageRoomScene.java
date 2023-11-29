@@ -57,7 +57,7 @@ public class StorageRoomScene extends Scene {
             }};
 
             //TODO: uncomment this
-            if (!allPotionsCollected /*&& gameIntroFinished && hasAllItems*/){
+            if (!allPotionsCollected && gameIntroFinished /*&& hasAllItems*/){
                 if (!greenPotion)
                     suppliers.add(() -> new Interactable("potionGreen",
                             new Vector2(),
@@ -177,7 +177,6 @@ public class StorageRoomScene extends Scene {
 
         if (!state.gameIntroFinished) {
             showIntroDialogue();
-            //addGameObject(readNote());
 
             LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
             //TODO: player can't move while intro dialogue is showing (uncomment)
@@ -190,7 +189,7 @@ public class StorageRoomScene extends Scene {
         super.render();
 
         //TODO: uncomment this
-        if (state.allPotionsCollected /*&& state.gameIntroFinished && state.hasAllItems*/ && !state.craftingTable){
+        if (state.allPotionsCollected && state.gameIntroFinished /*&& state.hasAllItems*/ && !state.craftingTable){
             Interactable in = new Interactable("craftingTable",
                     new Vector2(),
                     new Vector2(5f, 2.5f),
@@ -205,8 +204,7 @@ public class StorageRoomScene extends Scene {
         }
     }
 
-    private final float textShowTime = 6f;
-    //TODO: make intro dialogue skipable
+    private final float textShowTime = 3.5f;
     private void showIntroDialogue() {
         List<TextBox> texts = new ArrayList<>() {{
             add(new TextBox(

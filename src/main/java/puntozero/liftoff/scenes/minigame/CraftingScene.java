@@ -1,11 +1,12 @@
 package puntozero.liftoff.scenes.minigame;
 
-import puntozero.liftoff.prefabs.Interactable;
-import puntozero.liftoff.prefabs.TextBox;
+import puntozero.liftoff.components.TableBook;
+import puntozero.liftoff.prefabs.*;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.RectTransform;
 import pxp.engine.core.Scene;
 import pxp.engine.core.Transform;
+import pxp.engine.core.component.BoxCollider;
 import pxp.engine.core.component.Camera;
 import pxp.engine.core.component.Component;
 import pxp.engine.core.component.SpriteRenderer;
@@ -24,13 +25,12 @@ import pxp.engine.data.ui.Anchor;
 import pxp.engine.data.ui.RenderMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CraftingScene extends Scene {
     public CraftingScene(){
         super();
-
-        //TODO: import new images from google drive
 
         //TODO: replace assets to Liftoff
         AssetManager.createSprite("workbench", "crafting/workbench.png", 16);
@@ -102,90 +102,39 @@ public class CraftingScene extends Scene {
             () -> new GameObject("pot", new Component[] {
                     new SpriteRenderer(AssetManager.get("pot", SpriteAsset.class))
             }),
-            () -> new Interactable("potionBlue",
-                    new Vector2(),
-                    new Vector2(1f, 1f),
-                    new Image(AssetManager.get("blueBottle", SpriteAsset.class)),
-                    takePotion("potionBlue"))
-            {{
-                transform = new Transform(
-                    new Vector2(-4.8f, -2.4f),
-                    new Vector2(0.4f, 0.4f)
-                );
-            }},
-            () -> new Interactable("potionGreen",
-                    new Vector2(),
-                    new Vector2(1f, 1f),
-                    new Image(AssetManager.get("greenBottle", SpriteAsset.class)),
-                    takePotion("potionGreen"))
-            {{
-                transform = new Transform(
-                    new Vector2(-3.5f, -2.4f),
-                    new Vector2(0.4f, 0.4f)
-                );
-            }},
-            () -> new Interactable("potionRed",
-                    new Vector2(),
-                    new Vector2(1f, 1f),
-                    new Image(AssetManager.get("redBottle", SpriteAsset.class)),
-                    takePotion("potionRed"))
-            {{
-                transform = new Transform(
-                    new Vector2(-2.2f, -2.4f),
-                    new Vector2(0.4f, 0.4f)
-                );
-            }},
-            //TODO: based on the book in your inventory -> I don't know how to do that
+            () -> new GameObject("potions", new Component[] { }, createPotions()),
             () -> new GameObject("craftingBook", new Component[] {
-                    new SpriteRenderer(AssetManager.get("openOrangeBook", SpriteAsset.class))
+                    new SpriteRenderer(new TableBook().book)
             }) {{
                transform = new Transform(
                    new Vector2(-3.5f, 2f),
                    new Vector2(0.7f, 0.7f)
                );
             }},
-            () -> new GameObject("napkin", new Component[] {
-                    new SpriteRenderer(AssetManager.get("napkinTable", SpriteAsset.class))
-            }) {{
-                transform = new Transform(
-                        new Vector2(3f, -2f),
-                        new Vector2(0.7f, 0.7f)
-                );
-            }},
-            () -> new GameObject("matches", new Component[] {
-                    new SpriteRenderer(AssetManager.get("matchBoxTable", SpriteAsset.class))
-            }) {{
-                transform = new Transform(
-                        new Vector2(4f, 0f),
-                        new Vector2(0.3f, 0.3f)
-                );
-            }},
+            () -> new Napkin(new Vector2(3.3f, -2f), new Vector2(0.7f,0.7f)),
+            () -> new NapkinSlot(new Vector2(0f,0f)),
+            () -> new Matches(new Vector2(3.3f, -0.6f), new Vector2(0.4f, 0.4f)),
         });
     }
 
-    private PXPEvent takePotion(String object) {
-        return new PXPEvent(){
-            @Override
-            public void invoke() {
-                //TODO: Add potions to inventory (uncomment)
-                if (object.equals("potionRed")) {
-                    addGameObject(new GameObject("potRed", new Component[] {
-                            new SpriteRenderer(AssetManager.get("redPot", SpriteAsset.class))
-                    }));
-                }
-                else if (object.equals("potionBlue")) {
-                    addGameObject(new GameObject("potBlue", new Component[] {
-                            new SpriteRenderer(AssetManager.get("bluePot", SpriteAsset.class))
-                    }));
-                }
-                else if (object.equals("potionGreen")) {
-                    addGameObject(new GameObject("potGreen", new Component[] {
-                            new SpriteRenderer(AssetManager.get("greenPot", SpriteAsset.class))
-                    }));
-                }
+    private GameObject[] createPotions() {
+        List<GameObject> potions = new ArrayList<>() {{
+            add(new Potion(Potion.Type.BLUE, new Vector2(0, -2.3f), new Vector2(0.4f,0.4f)));
+            add(new Potion(Potion.Type.GREEN, new Vector2(0, -2.3f), new Vector2(0.4f,0.4f)));
+            add(new Potion(Potion.Type.RED, new Vector2(0, -2.3f), new Vector2(0.4f,0.4f)));
+        }};
+        Collections.shuffle(potions);
 
-                getGameObject(object).destroy();
-            }
-        };
+        float offset = -7 * Potion.SIZE / 2;
+
+        int index = 0;
+        for (GameObject potion : potions)
+            potion.transform.position.x = offset + Potion.SIZE * index++;
+
+        for (int i = 0; i < 3; i++){
+            potions.add(new PotionSlot(Potion.Type.values()[i], new Vector2(0f, 0f)));
+        }
+
+        return potions.toArray(new GameObject[0]);
     }
 }
