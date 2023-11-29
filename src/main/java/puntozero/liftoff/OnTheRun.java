@@ -3,6 +3,7 @@ package puntozero.liftoff;
 import puntozero.liftoff.manager.SceneStateManager;
 import puntozero.liftoff.scenes.*;
 import puntozero.liftoff.scenes.minigame.BooksScene;
+import puntozero.liftoff.scenes.minigame.CraftingScene;
 import puntozero.liftoff.scenes.minigame.KeysMinigame;
 import puntozero.liftoff.scenes.minigame.PotsScene;
 import pxp.engine.core.Game;
@@ -85,6 +86,45 @@ public class OnTheRun extends Game
         AssetManager.createSprite("adult", "diningRoom/adult.png", 16);
         AssetManager.createSprite("kid", "diningRoom/boy.png", 16);
 
+        // discipline
+        AssetManager.createSprite("disciplineBackground", "disciplineRoom/background.png", 16);
+        AssetManager.createSprite("disciplineLight", "disciplineRoom/background_light.png", 16);
+        AssetManager.createSprite("disciplineForeground", "disciplineRoom/foreground.png", 16);
+        AssetManager.createSprite("key", "disciplineRoom/key.png", 16);
+        AssetManager.createSprite("coatKey", "disciplineRoom/coat_key.png", 16);
+
+        // storage
+        AssetManager.createSprite("storageBackground", "storageRoom/background.png", 16);
+        AssetManager.createSprite("noteBig", "storageRoom/note_big.png", 16);
+        AssetManager.createSprite("noteSmall", "storageRoom/note_small.png", 16);
+        AssetManager.createSprite("potionBlue", "storageRoom/potion_blue.png", 16);
+        AssetManager.createSprite("potionGreen", "storageRoom/potion_green.png", 16);
+        AssetManager.createSprite("potionRed", "storageRoom/potion_red.png", 16);
+        AssetManager.createSprite("craftingTable", "storageRoom/craftingtable.png", 16);
+
+        // crafting
+        AssetManager.createSprite("workbench", "crafting/workbench.png", 16);
+
+        AssetManager.createSprite("openBlueBook", "crafting/book_blue_open.png", 16);
+        AssetManager.createSprite("openGreenBook", "crafting/book_green_open.png", 16);
+        AssetManager.createSprite("openOrangeBook", "crafting/book_orange_open.png", 16);
+        AssetManager.createSprite("openPinkBook", "crafting/book_pink_open.png", 16);
+        AssetManager.createSprite("openPurpleBook", "crafting/book_purple_open.png", 16);
+        AssetManager.createSprite("openRedBook", "crafting/book_red_open.png", 16);
+
+        AssetManager.createSprite("blueBottle", "crafting/bottle_blue.png", 16);
+        AssetManager.createSprite("greenBottle", "crafting/bottle_green.png", 16);
+        AssetManager.createSprite("redBottle", "crafting/bottle_red.png", 16);
+
+        AssetManager.createSprite("matchBoxTable", "crafting/matchbox_table.png", 16);
+        AssetManager.createSprite("molotov", "crafting/molotov.png", 16);
+        AssetManager.createSprite("napkinTable", "crafting/napkin.png", 16);
+
+        AssetManager.createSprite("bluePot", "crafting/blue_pot.png", 16);
+        AssetManager.createSprite("greenPot", "crafting/green_pot.png", 16);
+        AssetManager.createSprite("redPot", "crafting/red_pot.png", 16);
+        AssetManager.createSprite("pot", "crafting/pot.png", 16);
+
         // items
         AssetManager.createSprite("item_matchBox", "items/matchBox.png", 16);
         AssetManager.createSprite("item_pot", "items/pot.png", 16);
@@ -166,7 +206,10 @@ public class OnTheRun extends Game
             new LibraryScene(),
             new BooksScene(),
             new DiningRoomScene(),
-            new KeysMinigame()
+            new KeysMinigame(),
+            new StorageRoomScene(),
+            new CraftingScene(),
+            new DisciplineScene()
         };
     }
 

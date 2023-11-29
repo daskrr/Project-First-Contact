@@ -2,6 +2,8 @@ package puntozero.liftoff.scenes;
 
 import processing.event.MouseEvent;
 import puntozero.liftoff.components.PlayerInventory;
+import puntozero.liftoff.data.SceneIndex;
+import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
 import puntozero.liftoff.prefabs.*;
@@ -56,8 +58,8 @@ public class StorageRoomScene extends Scene {
                 add(PlayerInventory::create);
             }};
 
-            //TODO: uncomment this
-            if (!allPotionsCollected && gameIntroFinished /*&& hasAllItems*/){
+            // TODO: uncomment this
+            if (!allPotionsCollected && gameIntroFinished /*&& hasAllItems*/) {
                 if (!greenPotion)
                     suppliers.add(() -> new Interactable("potionGreen",
                             new Vector2(),
@@ -104,8 +106,7 @@ public class StorageRoomScene extends Scene {
                 SceneStateManager.getInstance().levelPlayerPosition = levelPlayer.transform.position;
 
                 // change scene to minigame scene
-                //TODO: uncomment
-                //context.setScene(SceneIndex.CRAFTING.index);
+                context.setScene(SceneIndex.CRAFTING.index);
             }
         };
     }
@@ -114,17 +115,16 @@ public class StorageRoomScene extends Scene {
         return new PXPEvent() {
             @Override
             public void invoke() {
-                //TODO: Add potions to inventory (uncomment)
                 if (object.equals("potionRed")) {
-                    //PlayerInventory.addItem(ItemRegistry.POTIONRED.item);
+                    PlayerInventory.addItem(ItemRegistry.POTION_RED.item);
                     state.redPotion = true;
                 }
                 else if (object.equals("potionBlue")) {
-                    //PlayerInventory.addItem(ItemRegistry.POTIONBLUE.item);
+                    PlayerInventory.addItem(ItemRegistry.POTION_BLUE.item);
                     state.bluePotion = true;
                 }
                 else if (object.equals("potionGreen")) {
-                    //PlayerInventory.addItem(ItemRegistry.POTIONGREEN.item);
+                    PlayerInventory.addItem(ItemRegistry.POTION_GREEN.item);
                     state.greenPotion = true;
                 }
 
@@ -156,17 +156,6 @@ public class StorageRoomScene extends Scene {
         // this only executes once when the scene is created!
         this.state = SceneStateManager.getInstance().get(this, new StorageRoomSceneState());
         this.setGameObjects(state.restoreSceneState(this));
-
-        //TODO: replace assets to Liftoff
-        AssetManager.createSprite("storageBackground", "storageRoom/background.png", 16);
-        AssetManager.createSprite("noteBig", "storageRoom/note_big.png", 16);
-        AssetManager.createSprite("noteSmall", "storageRoom/note_small.png", 16);
-
-        AssetManager.createSprite("potionBlue", "storageRoom/potion_blue.png", 16);
-        AssetManager.createSprite("potionGreen", "storageRoom/potion_green.png", 16);
-        AssetManager.createSprite("potionRed", "storageRoom/potion_red.png", 16);
-
-        AssetManager.createSprite("craftingTable", "storageRoom/craftingtable.png", 16);
     }
 
     @Override
@@ -188,7 +177,7 @@ public class StorageRoomScene extends Scene {
     protected void render() {
         super.render();
 
-        //TODO: uncomment this
+        // TODO: uncomment this
         if (state.allPotionsCollected && state.gameIntroFinished /*&& state.hasAllItems*/ && !state.craftingTable){
             Interactable in = new Interactable("craftingTable",
                     new Vector2(),
@@ -270,13 +259,13 @@ public class StorageRoomScene extends Scene {
                 t.remove(textShowTime);
             }
             else if (i+1 >= texts.size()){
-                this.context.runLater(t, i*textShowTime, () -> {
+                this.context.runLater(t, i * textShowTime, () -> {
                     addGameObject(readNote());
                     state.gameIntroFinished = true;
                 });
             }
             else{
-                this.context.runLater(t, i*textShowTime, () -> {
+                this.context.runLater(t, i * textShowTime, () -> {
                     addGameObject(t);
                     t.remove(textShowTime);
                 });
@@ -301,8 +290,7 @@ public class StorageRoomScene extends Scene {
                     onClick = new PXPSingleEvent<>() {
                         @Override
                         public void invoke(MouseEvent mouseEvent) {
-                            //TODO: Add note to inventory (uncomment)
-                            //PlayerInventory.addItem(ItemRegistry.NOTE.item);
+                            PlayerInventory.addItem(ItemRegistry.NOTE.item);
 
                             getGameObject("bigNoteCanvas").destroy();
 

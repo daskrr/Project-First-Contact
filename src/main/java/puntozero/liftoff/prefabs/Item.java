@@ -19,7 +19,6 @@ public class Item extends GameObject
 
         @Override
         public void mouseClick(MouseEvent mouseEvent) {
-//            gameObject.isActive = false; // TODO can't destroy????
             gameObject.destroy();
             PlayerInventory.addItem(item);
         }

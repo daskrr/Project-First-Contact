@@ -29,27 +29,26 @@ public class Molotov extends GameObject {
 
         @Override
         public void mouseClick(MouseEvent mouseEvent) {
-            //TODO: uncomment this
-//            PlayerInventory.addItem(ItemRegistry.MOLOTOV.item);
+            PlayerInventory.addItem(ItemRegistry.MOLOTOV.item);
             this.gameObject.destroy();
             ctx().runLater(this.gameObject, 2f, () -> {
 
                 ctx().getCurrentScene().addGameObject(new GameObject("blackCanvas", new Component[] {
-                        new Canvas(RenderMode.CAMERA)
+                    new Canvas(RenderMode.CAMERA)
                 }, new GameObject[] {
-                        new GameObject("blackScreen", new Component[] {
-                                new Image(AssetManager.get("blank", SpriteAsset.class)) {{
-                                    color = Color.black();
-                                }}
-                        }) {{
-                            transform = new RectTransform(
-                                    new Vector2(),
-                                    new Vector3(),
-                                    new Vector2(1,1),
-                                    new Vector2(1920, 1080),
-                                    Anchor.CENTER
-                            );
+                    new GameObject("blackScreen", new Component[] {
+                        new Image(AssetManager.get("blank", SpriteAsset.class)) {{
+                            color = Color.black();
                         }}
+                    }) {{
+                        transform = new RectTransform(
+                            new Vector2(),
+                            new Vector3(),
+                            new Vector2(1,1),
+                            new Vector2(1920, 1080),
+                            Anchor.CENTER
+                        );
+                    }}
                 }));
 
                 ctx().getCurrentScene().getGameObject("canvas").destroy();

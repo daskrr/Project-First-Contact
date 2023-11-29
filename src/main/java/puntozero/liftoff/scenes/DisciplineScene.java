@@ -1,6 +1,7 @@
 package puntozero.liftoff.scenes;
 
 import puntozero.liftoff.components.PlayerInventory;
+import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
 import puntozero.liftoff.prefabs.AdultDeath;
@@ -78,27 +79,18 @@ public class DisciplineScene extends Scene {
         return new PXPEvent(){
             @Override
             public void invoke() {
-                //TODO: uncomment this
-                //PlayerInventory.addItem(ItemRegistry.KEY.item);
+                PlayerInventory.addItem(ItemRegistry.KEYS.item);
                 getGameObject(object).destroy();
             }
         };
     }
 
     private final DisciplineSceneState state;
-    public DisciplineScene (){
+    public DisciplineScene() {
         super();
 
         this.state = SceneStateManager.getInstance().get(this, new DisciplineSceneState());
         this.setGameObjects(state.restoreSceneState(this));
-
-        //TODO: replace assets to Liftoff
-        AssetManager.createSprite("disciplineBackground", "disciplineRoom/background.png", 16);
-        AssetManager.createSprite("disciplineLight", "disciplineRoom/background_light.png", 16);
-        AssetManager.createSprite("disciplineForeground", "disciplineRoom/foreground.png", 16);
-
-        AssetManager.createSprite("key", "disciplineRoom/key.png", 16);
-        AssetManager.createSprite("coatKey", "disciplineRoom/coat_key.png", 16);
     }
 
     @Override

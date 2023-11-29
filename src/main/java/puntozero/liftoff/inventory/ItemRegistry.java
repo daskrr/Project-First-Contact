@@ -15,7 +15,11 @@ public enum ItemRegistry
     BOOK_RED(new InventoryItem("bookRed", "Book", AssetManager.get("book_item6", SpriteAsset.class))),
     NAPKIN(new InventoryItem("napkin", "Napkin", AssetManager.get("item_napkin", SpriteAsset.class))),
     NOTE(new InventoryItem("note", "Note", AssetManager.get("item_note", SpriteAsset.class))),
-    KEYS(new InventoryItem("keys", "Key Chain", AssetManager.get("item_keys", SpriteAsset.class)));
+    KEYS(new InventoryItem("keys", "Key Chain", AssetManager.get("item_keys", SpriteAsset.class))),
+    POTION_BLUE(new InventoryItem("keys", "Blue Potion", AssetManager.get("item_keys", SpriteAsset.class))),
+    POTION_RED(new InventoryItem("keys", "Red Potion", AssetManager.get("item_keys", SpriteAsset.class))),
+    POTION_GREEN(new InventoryItem("keys", "Green Potion", AssetManager.get("item_keys", SpriteAsset.class))),
+    MOLOTOV(new InventoryItem("molotov", "Molotov", AssetManager.get("molotov", SpriteAsset.class)));
 
 
     public final InventoryItem item;

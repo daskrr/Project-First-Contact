@@ -48,9 +48,8 @@ public class MainMenu extends Scene
                         @Override
                         public void invoke(MouseEvent mouseEvent) {
                             // activate player inventory
-                            context.setScene(SceneIndex.MAP.index);
-                            // TODO
-                            //context.setScene(SceneIndex.STORAGE_ROOM.index);
+                            //context.setScene(SceneIndex.MAP.index);
+                            context.setScene(SceneIndex.STORAGE_ROOM.index);
                         }
                     }),
                     createButton("LOAD GAME", new Vector2(0, 70), new PXPSingleEvent<>() { @Override public void invoke(MouseEvent mouseEvent) { } }),

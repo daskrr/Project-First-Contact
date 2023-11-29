@@ -35,14 +35,13 @@ public class Matches extends GameObject {
                 }
                 else {
                     // if potion mix wasn't in the right order you die
-                    //TODO: uncomment this
-//                    DeathScreen deathScreen = new DeathScreen("The bomb exploded and you died...", new PXPEvent() {
-//                        @Override
-//                        public void invoke() {
-//                            SceneStateManager.getInstance().reset();
-//                        }
-//                    });
-//                    addGameObject(deathScreen);
+                    DeathScreen deathScreen = new DeathScreen("The bomb exploded and you died...", new PXPEvent() {
+                        @Override
+                        public void invoke() {
+                            SceneStateManager.getInstance().reset();
+                        }
+                    });
+                    addGameObject(deathScreen);
                 }
             });
         }
