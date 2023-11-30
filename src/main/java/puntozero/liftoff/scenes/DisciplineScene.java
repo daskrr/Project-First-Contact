@@ -57,7 +57,6 @@ public class DisciplineScene extends Scene {
                     transform = new Transform(new Vector2(7f,2.93f));
                 }});
             }
-            //TODO: If child comes to close to adult then reset the game
 
             suppliers.add(() -> new GameObject("light", new Component[] {
                     new SpriteRenderer(AssetManager.get("disciplineLight", SpriteAsset.class)) {{
