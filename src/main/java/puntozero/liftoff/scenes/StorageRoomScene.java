@@ -57,8 +57,7 @@ public class StorageRoomScene extends Scene {
                 add(PlayerInventory::create);
             }};
 
-            // TODO: uncomment this
-            if (!allPotionsCollected && gameIntroFinished && scene.hasAllItems()) {
+            if (!allPotionsCollected) {
                 if (!greenPotion)
                     suppliers.add(() -> new Interactable("potionGreen",
                             new Vector2(),
@@ -86,17 +85,6 @@ public class StorageRoomScene extends Scene {
                     {{
                         transform = new Transform(new Vector2(-7.9f, 4.15f));
                     }});
-            }
-
-            if (allPotionsCollected && gameIntroFinished && scene.hasAllItems() ){
-                suppliers.add(() -> new Interactable("craftingTable",
-                        new Vector2(),
-                        new Vector2(5f, 2.5f),
-                        new Image(AssetManager.get("craftingTable", SpriteAsset.class)),
-                        scene.openMinigame())
-                {{
-                    transform = new Transform(new Vector2(5.3f, 5f));
-                }});
             }
 
             suppliers.add(() -> new GameObject("light", new Component[] {
@@ -136,36 +124,38 @@ public class StorageRoomScene extends Scene {
         return new PXPEvent() {
             @Override
             public void invoke() {
-                if (object.equals("potionRed")) {
-                    PlayerInventory.addItem(ItemRegistry.POTION_RED.item);
-                    state.redPotion = true;
-                }
-                else if (object.equals("potionBlue")) {
-                    PlayerInventory.addItem(ItemRegistry.POTION_BLUE.item);
-                    state.bluePotion = true;
-                }
-                else if (object.equals("potionGreen")) {
-                    PlayerInventory.addItem(ItemRegistry.POTION_GREEN.item);
-                    state.greenPotion = true;
-                }
+            if (object.equals("potionRed")) {
+                PlayerInventory.addItem(ItemRegistry.POTION_RED.item);
+                state.redPotion = true;
+            }
+            else if (object.equals("potionBlue")) {
+                PlayerInventory.addItem(ItemRegistry.POTION_BLUE.item);
+                state.bluePotion = true;
+            }
+            else if (object.equals("potionGreen")) {
+                PlayerInventory.addItem(ItemRegistry.POTION_GREEN.item);
+                state.greenPotion = true;
+            }
 
-                getGameObject(object).destroy();
+            getGameObject(object).destroy();
 
-                if (state.redPotion && state.greenPotion && state.bluePotion){
-                    TextBox textBox = new TextBox(
-                            "Time to make the bomb on the table.",
-                            17,
-                            new Vector2(600,200),
-                            new Color(30, 32, 36, 240),
-                            AssetManager.get("PressStart", FontAsset.class),
-                            Color.white(),
-                            new Vector2(550, -1)
-                    );
-                    addGameObject(textBox);
-                    textBox.remove(textShowTime);
+            //TODO: change this
+            //TODO: if all the items are collected then you get this message.
+            if (state.redPotion && state.greenPotion && state.bluePotion){
+//                TextBox textBox = new TextBox(
+//                        "Time to make the bomb on the table.",
+//                        17,
+//                        new Vector2(600,200),
+//                        new Color(30, 32, 36, 240),
+//                        AssetManager.get("PressStart", FontAsset.class),
+//                        Color.white(),
+//                        new Vector2(550, -1)
+//                );
+//                addGameObject(textBox);
+//                textBox.remove(textShowTime);
 
-                    state.allPotionsCollected = true;
-                }
+                state.allPotionsCollected = true;
+            }
             }
         };
     }
@@ -198,7 +188,6 @@ public class StorageRoomScene extends Scene {
     protected void render() {
         super.render();
 
-        // TODO: uncomment this
         if (state.allPotionsCollected && state.gameIntroFinished && hasAllItems() && !state.craftingTable){
             Interactable in = new Interactable("craftingTable",
                     new Vector2(),
