@@ -3,6 +3,7 @@ package puntozero.liftoff.components;
 import processing.event.MouseEvent;
 import puntozero.liftoff.inventory.InventoryItem;
 import puntozero.liftoff.inventory.ItemRegistry;
+import puntozero.liftoff.manager.SoundManager;
 import puntozero.liftoff.prefabs.Monologue;
 import puntozero.liftoff.prefabs.UIItem;
 import pxp.engine.core.GameObject;
@@ -61,6 +62,8 @@ public class PlayerInventory extends Component
         Monologue monologue = new Monologue("Obtained 1x "+ item.humanName);
         GameProcess.getInstance().getCurrentScene().addGameObject(monologue);
         monologue.remove(1.5f);
+
+        SoundManager.playSound("sound2");
     }
     public static void removeItem(String name) {
         // prevent concurrent

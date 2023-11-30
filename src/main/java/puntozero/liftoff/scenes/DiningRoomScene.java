@@ -6,6 +6,7 @@ import puntozero.liftoff.data.SceneIndex;
 import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
+import puntozero.liftoff.manager.SoundManager;
 import puntozero.liftoff.prefabs.*;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.Scene;
@@ -49,7 +50,7 @@ public class DiningRoomScene extends Scene {
                 }));
                 add(() -> new Exit(new Vector2(13f,0f)));
                 add(() -> new LevelPlayer() {{
-                    transform = new Transform(new Vector2(13f, 5f));
+                    transform = new Transform(new Vector2(13f, 4.5f));
                 }});
                 add(PlayerInventory::create);
 //                add(() -> new Interactable("chairLeft",
@@ -153,10 +154,11 @@ public class DiningRoomScene extends Scene {
 
                 if (state.isOnChair) {
                     levelPlayer.transform.position.x = chair.transform.position.x;
-                    levelPlayer.transform.position.y -= 3.9f;
+                    levelPlayer.transform.position.y = 1.1f;
                     levelPlayer.controller.setLocked(true);
                 }
                 else {
+                    SoundManager.playSound("sound7");
                     levelPlayer.transform.position.y = state.defaultY;
                     levelPlayer.controller.setLocked(false);
                 }
@@ -178,6 +180,8 @@ public class DiningRoomScene extends Scene {
 //                    levelPlayer.controller.destination = levelPlayer.transform.position;
 
                 plate.destroy();
+
+                SoundManager.playSound("sound8");
 
                 addGameObject(new GameObject("plate", new Component[] {
                     new SpriteRenderer(AssetManager.get("brokenPlate", SpriteAsset.class))

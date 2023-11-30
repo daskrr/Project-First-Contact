@@ -6,6 +6,8 @@ import puntozero.liftoff.components.MapPlayerController;
 import puntozero.liftoff.components.PlayerInventory;
 import puntozero.liftoff.data.SceneIndex;
 import puntozero.liftoff.manager.SceneStateManager;
+import puntozero.liftoff.manager.SoundManager;
+import puntozero.liftoff.prefabs.AdultMonologue;
 import puntozero.liftoff.prefabs.Door;
 import puntozero.liftoff.prefabs.MapPlayer;
 import puntozero.liftoff.prefabs.Monologue;
@@ -66,10 +68,11 @@ public class MapScene extends Scene
             () -> new GameObject("adult", new Component[] {
                 new SpriteRenderer(AssetManager.get("mapAdult", SpriteAsset.class)),
                 new AdultHandler(),
-                new CircleCollider(new Vector2(0,.1f), .3f)
+                new CircleCollider(new Vector2(0,.1f), 1.3f)
             }) {{
                 transform = new Transform(new Vector2(1.2f, -3f));
             }},
+            () -> new AdultMonologue("What is happening there?!"),
 
             PlayerInventory::create
         };
@@ -112,12 +115,14 @@ public class MapScene extends Scene
                                 context.setScene(SceneIndex.KEYS.index);
                             }
                             else {
+                                SoundManager.playSound("sound6");
                                 Monologue monologue = new Monologue("Oh, the library is locked.\nWhere can I find the key?\nThe adults always carry them in their pockets…");
                                 addGameObject(monologue);
                                 monologue.remove(5f);
                             }
                         }
                         else {
+                            SoundManager.playSound("sound6");
                             Monologue monologue = new Monologue("Mh... locked...\nNoone misbehaved today so\nthe discipline room is locked.");
                             addGameObject(monologue);
                             monologue.remove(3.5f);

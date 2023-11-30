@@ -20,8 +20,10 @@ public class LevelPlayer extends GameObject
             new SpriteRenderer(AssetManager.get("levelPlayer", SpriteAsset.class)) {{
                 setSortingLayer("Player");
             }},
-            new Animation("idle", new SpriteAsset[] { AssetManager.get("levelPlayer", SpriteAsset.class) }, 1f),
-            new Animation("walk", new SpriteAsset[] { AssetManager.get("levelPlayer", SpriteAsset.class) }, 1f),
+//            new Animation("idle", new SpriteAsset[] { AssetManager.get("levelPlayer", SpriteAsset.class) }, 1f),
+            new Animation("idle", AssetManager.get("levelPlayer", SpriteAsset.class), 2, 2, 1f),
+            new Animation("walk", AssetManager.get("levelPlayer", SpriteAsset.class), 0, 1, .6f),
+//            new Animation("walk", new SpriteAsset[] { AssetManager.get("levelPlayer", SpriteAsset.class) }, 1f),
             new Animator("idle"),
             this.controller,
             new BoxCollider(new Vector2(), new Vector2(1f, 3f)) {{

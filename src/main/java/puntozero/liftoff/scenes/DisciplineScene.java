@@ -41,7 +41,7 @@ public class DisciplineScene extends Scene {
                 }));
                 add(() -> new Exit(new Vector2(13f, 0f)));
                 add(() -> new LevelPlayer() {{
-                    transform = new Transform(new Vector2(13f, 5f));
+                    transform = new Transform(new Vector2(13f, 4.5f));
                 }});
                 add(() -> new AdultDeath(new Vector2(-5f,4.5f)));
                 add(PlayerInventory::create);

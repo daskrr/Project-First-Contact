@@ -53,7 +53,7 @@ public class StorageRoomScene extends Scene {
                 }));
                 add(() -> new Exit(new Vector2(13f, 0f)));
                 add(() -> new LevelPlayer() {{
-                    transform = new Transform(new Vector2(0f, 5f));
+                    transform = new Transform(new Vector2(0f, 4.5f));
                 }});
                 add(PlayerInventory::create);
             }};

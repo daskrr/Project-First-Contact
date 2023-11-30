@@ -25,6 +25,7 @@ public class SceneStateManager
     public boolean disciplineUnlocked = false;
 
     public boolean adult = true;
+    public boolean ending = false;
 
     public SceneStateManager() {
         if (instance == null)

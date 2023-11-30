@@ -4,6 +4,7 @@ import processing.event.MouseEvent;
 import puntozero.liftoff.components.PlayerInventory;
 import puntozero.liftoff.data.SceneIndex;
 import puntozero.liftoff.inventory.ItemRegistry;
+import puntozero.liftoff.manager.SceneStateManager;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.RectTransform;
 import pxp.engine.core.Transform;
@@ -72,7 +73,9 @@ public class Molotov extends GameObject {
                     }}
                 }));
 
-                ctx().getCurrentScene().getGameObject("canvas").destroy();
+                GameObject canvas = ctx().getCurrentScene().getGameObject("canvas");
+                if (canvas != null && !canvas.isDestroyed)
+                    canvas.destroy();
 
                 ctx().runLater(this.gameObject, 1f, () -> {
 //                    ctx().setScene(SceneIndex.MAP.index);
@@ -85,22 +88,10 @@ public class Molotov extends GameObject {
             if (!this.canContinue) return;
 
             if (Input.getKeyOnce(Key.ENTER)) {
-                getGameObjects(ctx().getCurrentScene().objects).forEach(o -> {
-                    if (o.isDestroyed)
-                        Debug.log(o.name);
-                });
+                SceneStateManager.getInstance().ending = true;
+                SceneStateManager.getInstance().mapPlayerPosition = new Vector2(-0.627f, -1.53f);
                 ctx().setScene(SceneIndex.MAP.index);
             }
-        }
-
-        private List<GameObject> getGameObjects(List<GameObject> gosI) {
-            List<GameObject> gos = new ArrayList<>();
-            gosI.forEach(o -> {
-                gos.add(o);
-                gos.addAll(getGameObjects(o.children));
-            });
-
-            return gos;
         }
 
         @Override

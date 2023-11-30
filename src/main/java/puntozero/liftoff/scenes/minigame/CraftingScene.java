@@ -59,7 +59,7 @@ public class CraftingScene extends Scene {
                     }}
                 }) {{
                     transform = new RectTransform(
-                        new Vector2(0, -240f),
+                        new Vector2(0, -310f),
                         new Vector3(0,0,0),
                         new Vector2(1,1),
                         new Vector2(-1f, -1f),
