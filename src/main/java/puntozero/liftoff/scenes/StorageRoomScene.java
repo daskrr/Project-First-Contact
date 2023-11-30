@@ -205,7 +205,7 @@ public class StorageRoomScene extends Scene {
         }
     }
 
-    private final float textShowTime = 4.5f;
+    private final float textShowTime = 5f;
     private void showIntroDialogue() {
         List<TextBox> texts = new ArrayList<>() {{
             add(new TextBox(
