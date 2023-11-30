@@ -3,13 +3,19 @@
     <output-path>$PROJECT_DIR$/out/artifacts/liftoff_full</output-path>
     <root id="archive" name="liftoff_full.jar">
       <element id="module-output" name="liftoff" />
-      <element id="library" level="project" name="core" />
-      <element id="library" level="project" name="PXP" />
-      <element id="library" level="project" name="sound" />
-      <element id="library" level="project" name="video" />
       <element id="directory" name="META-INF">
         <element id="dir-copy" path="$PROJECT_DIR$/src/main/java/META-INF" />
       </element>
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/java/META-INF/libs/core/core.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/java/META-INF/libs/core/gluegen-rt.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/java/META-INF/libs/core/jogl-all.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/java/META-INF/libs/PXP.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/java/META-INF/libs/sound/javamp3-1.0.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/java/META-INF/libs/sound/jsyn-20171016.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/java/META-INF/libs/sound/sound.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/java/META-INF/libs/video/gst1-java-core-1.4.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/java/META-INF/libs/video/jna.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/main/java/META-INF/libs/video/video.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

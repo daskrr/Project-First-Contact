@@ -70,7 +70,8 @@ public class UIKey extends GameObject
         this.setComponents(new Component[] {
             new Image(sprite) {{
                 preserveAspect = true;
-            }}
+            }},
+            new KeyHandler()
         });
 
         this.setChildren(new GameObject[] {

@@ -2,8 +2,11 @@ package puntozero.liftoff.scenes;
 
 import processing.event.MouseEvent;
 import puntozero.liftoff.components.PlayerInventory;
+import puntozero.liftoff.data.SceneIndex;
+import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
+import puntozero.liftoff.manager.SoundManager;
 import puntozero.liftoff.prefabs.*;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.RectTransform;
@@ -32,7 +35,6 @@ import java.util.List;
 public class StorageRoomScene extends Scene {
     public static class StorageRoomSceneState implements SceneState {
         private boolean gameIntroFinished = false;
-        public boolean hasAllItems = false;
         public boolean allPotionsCollected = false;
         public boolean redPotion = false;
         public boolean greenPotion = false;
@@ -51,13 +53,12 @@ public class StorageRoomScene extends Scene {
                 }));
                 add(() -> new Exit(new Vector2(13f, 0f)));
                 add(() -> new LevelPlayer() {{
-                    transform = new Transform(new Vector2(0f, 5f));
+                    transform = new Transform(new Vector2(0f, 4.5f));
                 }});
                 add(PlayerInventory::create);
             }};
 
-            //TODO: uncomment this
-            if (!allPotionsCollected && gameIntroFinished /*&& hasAllItems*/){
+            if (!allPotionsCollected) {
                 if (!greenPotion)
                     suppliers.add(() -> new Interactable("potionGreen",
                             new Vector2(),
@@ -87,6 +88,17 @@ public class StorageRoomScene extends Scene {
                     }});
             }
 
+            suppliers.add(() -> new GameObject("light", new Component[] {
+                new SpriteRenderer(AssetManager.get("storageLight", SpriteAsset.class)) {{
+                    setSortingLayer("Light");
+                }}
+            }));
+            suppliers.add(() -> new GameObject("foreground", new Component[] {
+                new SpriteRenderer(AssetManager.get("storageForeground", SpriteAsset.class)) {{
+                    setSortingLayer("Foreground");
+                }}
+            }));
+
             return suppliers.toArray(new GameObjectSupplier[0]);
         }
     }
@@ -104,8 +116,7 @@ public class StorageRoomScene extends Scene {
                 SceneStateManager.getInstance().levelPlayerPosition = levelPlayer.transform.position;
 
                 // change scene to minigame scene
-                //TODO: uncomment
-                //context.setScene(SceneIndex.CRAFTING.index);
+                context.setScene(SceneIndex.CRAFTING.index);
             }
         };
     }
@@ -114,34 +125,24 @@ public class StorageRoomScene extends Scene {
         return new PXPEvent() {
             @Override
             public void invoke() {
-                //TODO: Add potions to inventory (uncomment)
                 if (object.equals("potionRed")) {
-                    //PlayerInventory.addItem(ItemRegistry.POTIONRED.item);
+                    PlayerInventory.addItem(ItemRegistry.POTION_RED.item);
                     state.redPotion = true;
                 }
                 else if (object.equals("potionBlue")) {
-                    //PlayerInventory.addItem(ItemRegistry.POTIONBLUE.item);
+                    PlayerInventory.addItem(ItemRegistry.POTION_BLUE.item);
                     state.bluePotion = true;
                 }
                 else if (object.equals("potionGreen")) {
-                    //PlayerInventory.addItem(ItemRegistry.POTIONGREEN.item);
+                    PlayerInventory.addItem(ItemRegistry.POTION_GREEN.item);
                     state.greenPotion = true;
                 }
 
                 getGameObject(object).destroy();
 
+                //TODO: change this
+                //TODO: if all the items are collected then you get this message.
                 if (state.redPotion && state.greenPotion && state.bluePotion){
-                    TextBox textBox = new TextBox(
-                            "Time to make the bomb on the table.",
-                            17,
-                            new Vector2(600,200),
-                            new Color(30, 32, 36, 240),
-                            AssetManager.get("PressStart", FontAsset.class),
-                            Color.white(),
-                            new Vector2(550, -1)
-                    );
-                    addGameObject(textBox);
-                    textBox.remove(textShowTime);
 
                     state.allPotionsCollected = true;
                 }
@@ -149,29 +150,19 @@ public class StorageRoomScene extends Scene {
         };
     }
 
-    private final StorageRoomSceneState state;
+    private StorageRoomSceneState state;
     public StorageRoomScene(){
         super();
 
         // this only executes once when the scene is created!
         this.state = SceneStateManager.getInstance().get(this, new StorageRoomSceneState());
         this.setGameObjects(state.restoreSceneState(this));
-
-        //TODO: replace assets to Liftoff
-        AssetManager.createSprite("storageBackground", "storageRoom/background.png", 16);
-        AssetManager.createSprite("noteBig", "storageRoom/note_big.png", 16);
-        AssetManager.createSprite("noteSmall", "storageRoom/note_small.png", 16);
-
-        AssetManager.createSprite("potionBlue", "storageRoom/potion_blue.png", 16);
-        AssetManager.createSprite("potionGreen", "storageRoom/potion_green.png", 16);
-        AssetManager.createSprite("potionRed", "storageRoom/potion_red.png", 16);
-
-        AssetManager.createSprite("craftingTable", "storageRoom/craftingtable.png", 16);
     }
 
     @Override
     public void load() {
         // we need to reset the game object suppliers when the scene is loaded again, in order to preserve state
+        this.state = SceneStateManager.getInstance().get(this, new StorageRoomSceneState());
         this.setGameObjects(state.restoreSceneState(this));
         super.load();
 
@@ -179,8 +170,7 @@ public class StorageRoomScene extends Scene {
             showIntroDialogue();
 
             LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
-            //TODO: player can't move while intro dialogue is showing (uncomment)
-            //levelPlayer.controller.setLocked(true);
+            levelPlayer.controller.setLocked(true);
         }
     }
 
@@ -188,8 +178,7 @@ public class StorageRoomScene extends Scene {
     protected void render() {
         super.render();
 
-        //TODO: uncomment this
-        if (state.allPotionsCollected && state.gameIntroFinished /*&& state.hasAllItems*/ && !state.craftingTable){
+        if (state.allPotionsCollected && state.gameIntroFinished && hasAllItems() && !state.craftingTable){
             Interactable in = new Interactable("craftingTable",
                     new Vector2(),
                     new Vector2(5f, 2.5f),
@@ -204,7 +193,7 @@ public class StorageRoomScene extends Scene {
         }
     }
 
-    private final float textShowTime = 3.5f;
+    private final float textShowTime = 5f;
     private void showIntroDialogue() {
         List<TextBox> texts = new ArrayList<>() {{
             add(new TextBox(
@@ -270,13 +259,14 @@ public class StorageRoomScene extends Scene {
                 t.remove(textShowTime);
             }
             else if (i+1 >= texts.size()){
-                this.context.runLater(t, i*textShowTime, () -> {
+                this.context.runLater(t, i * textShowTime, () -> {
+                    SoundManager.playSound("sound1");
                     addGameObject(readNote());
                     state.gameIntroFinished = true;
                 });
             }
             else{
-                this.context.runLater(t, i*textShowTime, () -> {
+                this.context.runLater(t, i * textShowTime, () -> {
                     addGameObject(t);
                     t.remove(textShowTime);
                 });
@@ -301,13 +291,12 @@ public class StorageRoomScene extends Scene {
                     onClick = new PXPSingleEvent<>() {
                         @Override
                         public void invoke(MouseEvent mouseEvent) {
-                            //TODO: Add note to inventory (uncomment)
-                            //PlayerInventory.addItem(ItemRegistry.NOTE.item);
+                            PlayerInventory.addItem(ItemRegistry.NOTE.item);
 
                             getGameObject("bigNoteCanvas").destroy();
 
                             // show dialogue of missing part of note
-                            TextBox textBox = new TextBox(
+                            TextBox textBox1 = new TextBox(
                                     "Oh a part of the note is missing. I should go find the missing piece of information.",
                                     17,
                                     new Vector2(600,200),
@@ -316,11 +305,41 @@ public class StorageRoomScene extends Scene {
                                     Color.white(),
                                     new Vector2(550, -1)
                             );
-                            addGameObject(textBox);
-                            textBox.remove(textShowTime);
+                            addGameObject(textBox1);
+                            textBox1.remove(textShowTime);
 
-                            //TODO: player can move after the intro dialogue is over (uncomment)
-                            //levelPlayer.controller.setLocked(false);
+
+                            TextBox textBox2= new TextBox(
+                                    "To see your inventory press I. To take a look at the note again press N.",
+                                    17,
+                                    new Vector2(600,200),
+                                    new Color(30, 32, 36, 240),
+                                    AssetManager.get("PressStart", FontAsset.class),
+                                    Color.white(),
+                                    new Vector2(550, -1)
+                            );
+                            ctx().runLater(textBox2, textShowTime, () -> {
+                                addGameObject(textBox2);
+                                textBox2.remove(textShowTime);
+                            });
+
+                            TextBox textBox3= new TextBox(
+                                    "Use left click to move and right click to interact",
+                                    17,
+                                    new Vector2(600,200),
+                                    new Color(30, 32, 36, 240),
+                                    AssetManager.get("PressStart", FontAsset.class),
+                                    Color.white(),
+                                    new Vector2(550, -1)
+                            );
+                            ctx().runLater(textBox3, textShowTime*2, () -> {
+                                addGameObject(textBox3);
+                                textBox3.remove(textShowTime);
+
+
+                                LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
+                                levelPlayer.controller.setLocked(false);
+                            });
                         }
                     };
                     color = Color.white();
@@ -353,5 +372,14 @@ public class StorageRoomScene extends Scene {
                 );
             }}
         });
+    }
+
+    private boolean hasAllItems(){
+        if (PlayerInventory.hasItem("matchBox") &&
+            PlayerInventory.hasItem("pot") &&
+            PlayerInventory.hasItem("napkin")){
+            return true;
+        }
+        return false;
     }
 }

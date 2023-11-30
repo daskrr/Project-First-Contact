@@ -10,8 +10,9 @@ public enum SceneIndex
     BOOKS(5),
     DINING_ROOM(6),
     KEYS(7),
-    DISCIPLINE_ROOM(-1),
-    STORAGE_ROOM(-1);
+    STORAGE_ROOM(8),
+    CRAFTING(9),
+    DISCIPLINE_ROOM(10);
 
     public final int index;
 

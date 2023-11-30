@@ -3,15 +3,18 @@ package puntozero.liftoff;
 import puntozero.liftoff.manager.SceneStateManager;
 import puntozero.liftoff.scenes.*;
 import puntozero.liftoff.scenes.minigame.BooksScene;
+import puntozero.liftoff.scenes.minigame.CraftingScene;
 import puntozero.liftoff.scenes.minigame.KeysMinigame;
 import puntozero.liftoff.scenes.minigame.PotsScene;
 import pxp.engine.core.Game;
+import pxp.engine.core.GameProcess;
 import pxp.engine.core.Scene;
 import pxp.engine.data.Color;
 import pxp.engine.data.GameSettings;
 import pxp.engine.data.Vector2;
 import pxp.engine.data.assets.AssetManager;
 import pxp.engine.data.assets.FontAsset;
+import pxp.engine.data.assets.SoundAsset;
 import pxp.util.Pair;
 
 import java.util.ArrayList;
@@ -85,12 +88,56 @@ public class OnTheRun extends Game
         AssetManager.createSprite("adult", "diningRoom/adult.png", 16);
         AssetManager.createSprite("kid", "diningRoom/boy.png", 16);
 
+        // discipline
+        AssetManager.createSprite("disciplineBackground", "disciplineRoom/background.png", 16);
+        AssetManager.createSprite("disciplineLight", "disciplineRoom/background_light.png", 16);
+        AssetManager.createSprite("disciplineForeground", "disciplineRoom/foreground.png", 16);
+        AssetManager.createSprite("key", "disciplineRoom/key.png", 16);
+        AssetManager.createSprite("coatKey", "disciplineRoom/coat_key.png", 16);
+
+        // storage
+        AssetManager.createSprite("storageBackground", "storageRoom/background.png", 16);
+        AssetManager.createSprite("storageLight", "storageRoom/light.png", 16);
+        AssetManager.createSprite("storageForeground", "storageRoom/foreground.png", 16);
+        AssetManager.createSprite("noteBig", "storageRoom/note_big.png", 16);
+        AssetManager.createSprite("noteSmall", "storageRoom/note_small.png", 16);
+        AssetManager.createSprite("potionBlue", "storageRoom/potion_blue.png", 16);
+        AssetManager.createSprite("potionGreen", "storageRoom/potion_green.png", 16);
+        AssetManager.createSprite("potionRed", "storageRoom/potion_red.png", 16);
+        AssetManager.createSprite("craftingTable", "storageRoom/craftingtable.png", 16);
+
+        // crafting
+        AssetManager.createSprite("workbench", "crafting/workbench.png", 16);
+
+        AssetManager.createSprite("openBlueBook", "crafting/book_blue_open.png", 16);
+        AssetManager.createSprite("openGreenBook", "crafting/book_green_open.png", 16);
+        AssetManager.createSprite("openOrangeBook", "crafting/book_orange_open.png", 16);
+        AssetManager.createSprite("openPinkBook", "crafting/book_pink_open.png", 16);
+        AssetManager.createSprite("openPurpleBook", "crafting/book_purple_open.png", 16);
+        AssetManager.createSprite("openRedBook", "crafting/book_red_open.png", 16);
+
+        AssetManager.createSprite("blueBottle", "crafting/bottle_blue.png", 16);
+        AssetManager.createSprite("greenBottle", "crafting/bottle_green.png", 16);
+        AssetManager.createSprite("redBottle", "crafting/bottle_red.png", 16);
+
+        AssetManager.createSprite("matchBoxTable", "crafting/matchbox_table.png", 16);
+        AssetManager.createSprite("molotov", "crafting/molotov.png", 16);
+        AssetManager.createSprite("napkinTable", "crafting/napkin.png", 16);
+
+        AssetManager.createSprite("bluePot", "crafting/blue_pot.png", 16);
+        AssetManager.createSprite("greenPot", "crafting/green_pot.png", 16);
+        AssetManager.createSprite("redPot", "crafting/red_pot.png", 16);
+        AssetManager.createSprite("pot", "crafting/pot.png", 16);
+
         // items
         AssetManager.createSprite("item_matchBox", "items/matchBox.png", 16);
         AssetManager.createSprite("item_pot", "items/pot.png", 16);
         AssetManager.createSprite("item_napkin", "items/napkin.png", 16);
         AssetManager.createSprite("item_note", "items/note.png", 16);
         AssetManager.createSprite("item_keys", "items/keys.png", 16);
+        AssetManager.createSprite("item_potion_blue", "items/blue_potion.png", 16);
+        AssetManager.createSprite("item_potion_red", "items/red_potion.png", 16);
+        AssetManager.createSprite("item_potion_green", "items/green_potion.png", 16);
 
         // keys
         AssetManager.createSprite("keys/A", "keys/A.png", 16);
@@ -102,20 +149,34 @@ public class OnTheRun extends Game
         AssetManager.createSprite("keys/hole", "keys/key_hole.png", 16);
 
         // player
-        AssetManager.createSprite("levelPlayer", "level_player.png", 16);
+        AssetManager.createSpriteSheet("levelPlayer", "level_player.png", 16, 1, 3);
         AssetManager.createSpriteSheet("mapPlayer", "map_player.png", 16, 1, 3);
         AssetManager.createSprite("mapAdult", "adultMap.png", 16);
+        AssetManager.createSprite("finish", "finish.png", 100);
 
         // font
         AssetManager.createFont("PressStart", new FontAsset("fonts/PressStart2P-Regular.ttf", null,null,null, 40, true));
+
+        // sounds
+        AssetManager.createSound("backgroundSound", "sound/background.wav", 1f);
+        AssetManager.createSound("sound1", "sound/sound1.mp3", 1f);
+        AssetManager.createSound("sound2", "sound/sound2.mp3", 1f);
+        AssetManager.createSound("sound3", "sound/sound3.mp3", 1f);
+        AssetManager.createSound("sound4", "sound/sound4.mp3", 1f);
+        AssetManager.createSound("sound6", "sound/sound6.mp3", 1f);
+        AssetManager.createSound("sound7", "sound/sound7.mp3", 1f);
+        AssetManager.createSound("sound8", "sound/sound8.mp3", 1f);
+        AssetManager.createSound("sound9", "sound/sound9.mp3", 1f);
+        AssetManager.createSound("sound10", "sound/sound10.mp3", 1f);
+        AssetManager.createSound("sound11", "sound/sound11.mp3", 1f);
 
         // the asset path doesn't need to contain 'data/', but the
         // asset needs to be placed in a data directory
 
         // needs to return the game settings
         return new GameSettings() {{
-            size = new Vector2(1600,900);
-//            fullscreen = true;
+            size = new Vector2(1920,1080);
+            fullscreen = true;
 
             targetFPS = 140;
             background = new Color(0,0,0,255);
@@ -149,6 +210,13 @@ public class OnTheRun extends Game
     }
 
     @Override
+    public void setup() {
+        GameProcess.nextFrame(() -> {
+            AssetManager.get("backgroundSound", SoundAsset.class).getSound().loop();
+        });
+    }
+
+    @Override
     public Scene[] buildScenes() {
         new SceneStateManager();
 
@@ -166,7 +234,10 @@ public class OnTheRun extends Game
             new LibraryScene(),
             new BooksScene(),
             new DiningRoomScene(),
-            new KeysMinigame()
+            new KeysMinigame(),
+            new StorageRoomScene(),
+            new CraftingScene(),
+            new DisciplineScene()
         };
     }
 

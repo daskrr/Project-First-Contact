@@ -19,14 +19,13 @@ public class AdultDeath extends GameObject {
         @Override
         public void triggerEnter(Collider collider) {
             // GAME OVER when you get to close to the adult
-            //TODO: uncomment this
-//            DeathScreen deathScreen = new DeathScreen("The adult saw you. You were taken back to the storage room...", new PXPEvent() {
-//                @Override
-//                public void invoke() {
-//                    SceneStateManager.getInstance().reset();
-//                }
-//            });
-//            ctx().getCurrentScene().addGameObject(deathScreen);
+            DeathScreen deathScreen = new DeathScreen("The adult saw you. You were taken back to the storage room... GAME OVER", new PXPEvent() {
+                @Override
+                public void invoke() {
+                    SceneStateManager.getInstance().reset();
+                }
+            });
+            ctx().getCurrentScene().addGameObject(deathScreen);
         }
     }
 

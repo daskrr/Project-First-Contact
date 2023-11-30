@@ -27,22 +27,27 @@ public class Matches extends GameObject {
 
             if (PotionSlot.correctPotions != 3 || NapkinSlot.correctNapkin != 1) return;
 
-            ctx().runLater(this.gameObject, 0f, () -> {
+            ctx().runLater(this.gameObject, 1f, () -> {
                 if (PotionSlot.potions.get(0).type == Potion.Type.BLUE &&
                 PotionSlot.potions.get(1).type == Potion.Type.RED &&
                 PotionSlot.potions.get(2).type == Potion.Type.GREEN) {
                     ctx().getCurrentScene().addGameObject(new Molotov(new Vector2(0,0), new Vector2(1,1)));
+                    ctx().getCurrentScene().addGameObject(new GameObject("bombPot", new Component[] {
+                            new SpriteRenderer(AssetManager.get("pot", SpriteAsset.class))
+                    }));
                 }
                 else {
                     // if potion mix wasn't in the right order you die
-                    //TODO: uncomment this
-//                    DeathScreen deathScreen = new DeathScreen("The bomb exploded and you died...", new PXPEvent() {
-//                        @Override
-//                        public void invoke() {
-//                            SceneStateManager.getInstance().reset();
-//                        }
-//                    });
-//                    addGameObject(deathScreen);
+                    DeathScreen deathScreen = new DeathScreen("The bomb exploded and you died...", new PXPEvent() {
+                        @Override
+                        public void invoke() {
+                            SceneStateManager.getInstance().reset();
+                        }
+                    });
+
+                    ctx().getCurrentScene().getGameObject("canvas").destroy();
+
+                    instantiate(deathScreen);
                 }
             });
         }

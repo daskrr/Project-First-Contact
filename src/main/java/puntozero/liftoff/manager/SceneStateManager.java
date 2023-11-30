@@ -1,11 +1,12 @@
 package puntozero.liftoff.manager;
 
 import puntozero.liftoff.components.PlayerInventory;
-import puntozero.liftoff.prefabs.PotSlot;
+import puntozero.liftoff.prefabs.*;
 import pxp.engine.core.GameProcess;
 import pxp.engine.core.Scene;
 import pxp.engine.data.Vector2;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ public class SceneStateManager
     public boolean disciplineUnlocked = false;
 
     public boolean adult = true;
+    public boolean ending = false;
 
     public SceneStateManager() {
         if (instance == null)
@@ -45,8 +47,13 @@ public class SceneStateManager
         this.states.clear();
         this.mapPlayerPosition = null;
         this.levelPlayerPosition = null;
+        this.adult = true;
         PlayerInventory.reset();
         PotSlot.correctPots = 0;
+        NapkinSlot.correctNapkin = 0;
+        PotionSlot.correctPotions = 0;
+        PotionSlot.potionsInPot = 0;
+        PotionSlot.potions = new ArrayList<>();
 
         GameProcess.getInstance().setScene(0);
     }

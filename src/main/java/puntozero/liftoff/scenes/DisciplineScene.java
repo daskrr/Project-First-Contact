@@ -1,12 +1,10 @@
 package puntozero.liftoff.scenes;
 
 import puntozero.liftoff.components.PlayerInventory;
+import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
-import puntozero.liftoff.prefabs.AdultDeath;
-import puntozero.liftoff.prefabs.Exit;
-import puntozero.liftoff.prefabs.Interactable;
-import puntozero.liftoff.prefabs.LevelPlayer;
+import puntozero.liftoff.prefabs.*;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.Scene;
 import pxp.engine.core.Transform;
@@ -18,6 +16,7 @@ import pxp.engine.data.Color;
 import pxp.engine.data.GameObjectSupplier;
 import pxp.engine.data.Vector2;
 import pxp.engine.data.assets.AssetManager;
+import pxp.engine.data.assets.FontAsset;
 import pxp.engine.data.assets.SpriteAsset;
 import pxp.engine.data.event.PXPEvent;
 
@@ -40,7 +39,7 @@ public class DisciplineScene extends Scene {
                 }));
                 add(() -> new Exit(new Vector2(13f, 0f)));
                 add(() -> new LevelPlayer() {{
-                    transform = new Transform(new Vector2(13f, 5f));
+                    transform = new Transform(new Vector2(13f, 4.5f));
                 }});
                 add(() -> new AdultDeath(new Vector2(-5f,4.5f)));
                 add(PlayerInventory::create);
@@ -56,7 +55,6 @@ public class DisciplineScene extends Scene {
                     transform = new Transform(new Vector2(7f,2.93f));
                 }});
             }
-            //TODO: If child comes to close to adult then reset the game
 
             suppliers.add(() -> new GameObject("light", new Component[] {
                     new SpriteRenderer(AssetManager.get("disciplineLight", SpriteAsset.class)) {{
@@ -78,33 +76,38 @@ public class DisciplineScene extends Scene {
         return new PXPEvent(){
             @Override
             public void invoke() {
-                //TODO: uncomment this
-                //PlayerInventory.addItem(ItemRegistry.KEY.item);
+                PlayerInventory.addItem(ItemRegistry.KEYS.item);
                 getGameObject(object).destroy();
+                state.key = false;
             }
         };
     }
 
-    private final DisciplineSceneState state;
-    public DisciplineScene (){
+    private DisciplineSceneState state;
+    public DisciplineScene() {
         super();
 
         this.state = SceneStateManager.getInstance().get(this, new DisciplineSceneState());
         this.setGameObjects(state.restoreSceneState(this));
-
-        //TODO: replace assets to Liftoff
-        AssetManager.createSprite("disciplineBackground", "disciplineRoom/background.png", 16);
-        AssetManager.createSprite("disciplineLight", "disciplineRoom/background_light.png", 16);
-        AssetManager.createSprite("disciplineForeground", "disciplineRoom/foreground.png", 16);
-
-        AssetManager.createSprite("key", "disciplineRoom/key.png", 16);
-        AssetManager.createSprite("coatKey", "disciplineRoom/coat_key.png", 16);
     }
 
     @Override
     public void load() {
         // we need to reset the game object suppliers when the scene is loaded again, in order to preserve state
+        this.state = SceneStateManager.getInstance().get(this, new DisciplineSceneState());
         this.setGameObjects(state.restoreSceneState(this));
         super.load();
+
+        TextBox textBox1 = new TextBox(
+                "There are keys in the pocket of that jacket. Better get them quietly",
+                17,
+                new Vector2(600,200),
+                new Color(30, 32, 36, 240),
+                AssetManager.get("PressStart", FontAsset.class),
+                Color.white(),
+                new Vector2(550, -1)
+        );
+        addGameObject(textBox1);
+        textBox1.remove(5f);
     }
 }

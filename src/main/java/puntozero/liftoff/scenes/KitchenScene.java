@@ -5,6 +5,7 @@ import puntozero.liftoff.data.SceneIndex;
 import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
+import puntozero.liftoff.manager.SoundManager;
 import puntozero.liftoff.prefabs.*;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.Scene;
@@ -48,7 +49,7 @@ public class KitchenScene extends Scene
                 }));
                 add(() -> new Exit(new Vector2(13f, 0f)));
                 add(() -> new LevelPlayer() {{
-                    transform = new Transform(new Vector2(13f, 5f));
+                    transform = new Transform(new Vector2(13f, 4.5f));
                 }});
                 add(PlayerInventory::create);
             }};
@@ -146,6 +147,8 @@ public class KitchenScene extends Scene
                 getGameObject(object).destroy();
                 LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
                 levelPlayer.controller.destination = levelPlayer.transform.position;
+
+                SoundManager.playSound("sound3");
 
                 if (object.equals("doorLeft"))
                     state.doorLeft = false;

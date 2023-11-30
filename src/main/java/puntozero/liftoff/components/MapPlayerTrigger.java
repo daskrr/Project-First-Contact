@@ -2,6 +2,7 @@ package puntozero.liftoff.components;
 
 import puntozero.liftoff.data.SceneIndex;
 import puntozero.liftoff.manager.SceneStateManager;
+import puntozero.liftoff.manager.SoundManager;
 import puntozero.liftoff.prefabs.Monologue;
 import pxp.engine.core.component.Collider;
 import pxp.engine.core.component.Component;
@@ -45,12 +46,14 @@ public class MapPlayerTrigger extends Component
                         ctx().setScene(SceneIndex.KEYS.index);
                     }
                     else {
+                        SoundManager.playSound("sound6");
                         Monologue monologue = new Monologue("Oh, the library is locked.\nWhere can I find the key?\nThe adults always carry them in their pockets…");
                         instantiate(monologue);
                         monologue.remove(5f);
                     }
                 }
                 else {
+                    SoundManager.playSound("sound6");
                     Monologue monologue = new Monologue("Mh... locked...\nNoone misbehaved today so\nthe discipline room is locked.");
                     instantiate(monologue);
                     monologue.remove(3.5f);
