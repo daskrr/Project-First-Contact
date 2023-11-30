@@ -205,7 +205,7 @@ public class StorageRoomScene extends Scene {
         }
     }
 
-    private final float textShowTime = 3.5f;
+    private final float textShowTime = 4.5f;
     private void showIntroDialogue() {
         List<TextBox> texts = new ArrayList<>() {{
             add(new TextBox(
@@ -307,7 +307,7 @@ public class StorageRoomScene extends Scene {
                             getGameObject("bigNoteCanvas").destroy();
 
                             // show dialogue of missing part of note
-                            TextBox textBox = new TextBox(
+                            TextBox textBox1 = new TextBox(
                                     "Oh a part of the note is missing. I should go find the missing piece of information.",
                                     17,
                                     new Vector2(600,200),
@@ -316,8 +316,23 @@ public class StorageRoomScene extends Scene {
                                     Color.white(),
                                     new Vector2(550, -1)
                             );
-                            addGameObject(textBox);
-                            textBox.remove(textShowTime);
+                            addGameObject(textBox1);
+                            textBox1.remove(textShowTime);
+
+
+                            TextBox textBox2= new TextBox(
+                                    "To see your inventory press I. To take a look at the note again press N",
+                                    17,
+                                    new Vector2(600,200),
+                                    new Color(30, 32, 36, 240),
+                                    AssetManager.get("PressStart", FontAsset.class),
+                                    Color.white(),
+                                    new Vector2(550, -1)
+                            );
+                            ctx().runLater(textBox2, textShowTime, () -> {
+                                addGameObject(textBox2);
+                                textBox2.remove(textShowTime);
+                            });
 
                             //TODO: player can move after the intro dialogue is over (uncomment)
                             //levelPlayer.controller.setLocked(false);
