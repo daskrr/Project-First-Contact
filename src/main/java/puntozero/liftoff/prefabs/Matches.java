@@ -27,7 +27,7 @@ public class Matches extends GameObject {
 
             if (PotionSlot.correctPotions != 3 || NapkinSlot.correctNapkin != 1) return;
 
-            ctx().runLater(this.gameObject, 0f, () -> {
+            ctx().runLater(this.gameObject, 1f, () -> {
                 if (PotionSlot.potions.get(0).type == Potion.Type.BLUE &&
                 PotionSlot.potions.get(1).type == Potion.Type.RED &&
                 PotionSlot.potions.get(2).type == Potion.Type.GREEN) {
@@ -41,7 +41,10 @@ public class Matches extends GameObject {
                             SceneStateManager.getInstance().reset();
                         }
                     });
-                    addGameObject(deathScreen);
+
+                    ctx().getCurrentScene().getGameObject("canvas").destroy();
+
+                    instantiate(deathScreen);
                 }
             });
         }

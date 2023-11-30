@@ -95,6 +95,8 @@ public class OnTheRun extends Game
 
         // storage
         AssetManager.createSprite("storageBackground", "storageRoom/background.png", 16);
+        AssetManager.createSprite("storageLight", "storageRoom/light.png", 16);
+        AssetManager.createSprite("storageForeground", "storageRoom/foreground.png", 16);
         AssetManager.createSprite("noteBig", "storageRoom/note_big.png", 16);
         AssetManager.createSprite("noteSmall", "storageRoom/note_small.png", 16);
         AssetManager.createSprite("potionBlue", "storageRoom/potion_blue.png", 16);
@@ -131,6 +133,9 @@ public class OnTheRun extends Game
         AssetManager.createSprite("item_napkin", "items/napkin.png", 16);
         AssetManager.createSprite("item_note", "items/note.png", 16);
         AssetManager.createSprite("item_keys", "items/keys.png", 16);
+        AssetManager.createSprite("item_potion_blue", "items/blue_potion.png", 16);
+        AssetManager.createSprite("item_potion_red", "items/red_potion.png", 16);
+        AssetManager.createSprite("item_potion_green", "items/green_potion.png", 16);
 
         // keys
         AssetManager.createSprite("keys/A", "keys/A.png", 16);

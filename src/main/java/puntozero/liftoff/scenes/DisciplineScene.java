@@ -81,11 +81,12 @@ public class DisciplineScene extends Scene {
             public void invoke() {
                 PlayerInventory.addItem(ItemRegistry.KEYS.item);
                 getGameObject(object).destroy();
+                state.key = false;
             }
         };
     }
 
-    private final DisciplineSceneState state;
+    private DisciplineSceneState state;
     public DisciplineScene() {
         super();
 
@@ -96,6 +97,7 @@ public class DisciplineScene extends Scene {
     @Override
     public void load() {
         // we need to reset the game object suppliers when the scene is loaded again, in order to preserve state
+        this.state = SceneStateManager.getInstance().get(this, new DisciplineSceneState());
         this.setGameObjects(state.restoreSceneState(this));
         super.load();
     }

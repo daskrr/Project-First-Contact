@@ -1,5 +1,6 @@
 package puntozero.liftoff.components;
 
+import processing.event.MouseEvent;
 import puntozero.liftoff.inventory.InventoryItem;
 import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.prefabs.Monologue;
@@ -8,15 +9,17 @@ import pxp.engine.core.GameObject;
 import pxp.engine.core.GameProcess;
 import pxp.engine.core.RectTransform;
 import pxp.engine.core.component.Component;
+import pxp.engine.core.component.ui.Button;
 import pxp.engine.core.component.ui.Canvas;
 import pxp.engine.core.component.ui.Image;
-import pxp.engine.data.Input;
-import pxp.engine.data.Key;
-import pxp.engine.data.Vector2;
-import pxp.engine.data.Vector3;
+import pxp.engine.core.component.ui.Text;
+import pxp.engine.data.*;
 import pxp.engine.data.assets.AssetManager;
+import pxp.engine.data.assets.FontAsset;
 import pxp.engine.data.assets.SpriteAsset;
+import pxp.engine.data.event.PXPSingleEvent;
 import pxp.engine.data.ui.Anchor;
+import pxp.engine.data.ui.InteractableTransition;
 import pxp.engine.data.ui.RenderMode;
 import pxp.logging.Debug;
 
@@ -38,6 +41,10 @@ public class PlayerInventory extends Component
     @Override
     public void update() {
         ctx()._nextFrame(this::updateUI); // this should happen at start but it doesnt work for some reason
+
+        if (Input.getKeyOnce(Key.N)) {
+            instantiate(readNote());
+        }
     }
 
     public void updateUI() {
@@ -94,6 +101,58 @@ public class PlayerInventory extends Component
                 PlayerInventory.show = !PlayerInventory.show;
             }
         }
+    }
+
+    private GameObject readNote(){
+        return new GameObject("bigNoteCanvas", new Component[] {
+                new Canvas(RenderMode.CAMERA)
+        }, new GameObject[] {
+                new GameObject("bigNote", new Component[] {
+                        new Image(AssetManager.get("noteBig", SpriteAsset.class))
+                }) {{
+                    transform = new RectTransform(
+                            new Vector2(),
+                            new Vector2(700, 580)
+                    );
+                }},
+                new GameObject("button", new Component[] {
+                        new Button(InteractableTransition.COLOR) {{
+                            onClick = new PXPSingleEvent<>() {
+                                @Override
+                                public void invoke(MouseEvent mouseEvent) {
+                                    ctx().getCurrentScene().getGameObject("bigNoteCanvas").destroy();
+                                }
+                            };
+                            color = Color.white();
+                            normalColor = Color.white();
+                            hoverColor = new Color(240,240,240,255);
+                            pressedColor = new Color(230,230,230,255);
+                        }}
+                }, new GameObject[] {
+                        new GameObject("buttonText", new Component[] {
+                                new Text("Close", Pivot.CENTER) {{
+                                    font = AssetManager.get("PressStart", FontAsset.class);
+                                    fontSize = 20;
+                                    color = Color.white();
+                                }}
+                        }) {{
+                            transform = new RectTransform(
+                                    new Vector2(0, 0),
+                                    new Vector3(),
+                                    new Vector2(1,1),
+                                    new Vector2(-1f, -1f),
+                                    Anchor.CENTER_LEFT
+                            );
+                        }}
+                }) {{
+                    transform = new RectTransform(
+                            new Vector2(510, 225),
+                            new Vector3(),
+                            new Vector2(1,1),
+                            new Vector2(300, 50)
+                    );
+                }}
+        });
     }
 
     public static GameObject create() {

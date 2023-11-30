@@ -85,7 +85,8 @@ public class Potion extends GameObject
 
         private void checkPotions() {
             if (PotionSlot.potionsInPot > 0){
-                this.gameObject.destroy();
+//                this.gameObject.destroy();
+                this.gameObject.isActive = false;
                 PotionSlot.potionsInPot = 0;
             }
             if (PotionSlot.correctPotions != 3) return;

@@ -89,6 +89,17 @@ public class StorageRoomScene extends Scene {
                     }});
             }
 
+            suppliers.add(() -> new GameObject("light", new Component[] {
+                new SpriteRenderer(AssetManager.get("storageLight", SpriteAsset.class)) {{
+                    setSortingLayer("Light");
+                }}
+            }));
+            suppliers.add(() -> new GameObject("foreground", new Component[] {
+                new SpriteRenderer(AssetManager.get("storageForeground", SpriteAsset.class)) {{
+                    setSortingLayer("Foreground");
+                }}
+            }));
+
             return suppliers.toArray(new GameObjectSupplier[0]);
         }
     }
@@ -149,7 +160,7 @@ public class StorageRoomScene extends Scene {
         };
     }
 
-    private final StorageRoomSceneState state;
+    private StorageRoomSceneState state;
     public StorageRoomScene(){
         super();
 
@@ -161,6 +172,7 @@ public class StorageRoomScene extends Scene {
     @Override
     public void load() {
         // we need to reset the game object suppliers when the scene is loaded again, in order to preserve state
+        this.state = SceneStateManager.getInstance().get(this, new StorageRoomSceneState());
         this.setGameObjects(state.restoreSceneState(this));
         super.load();
 

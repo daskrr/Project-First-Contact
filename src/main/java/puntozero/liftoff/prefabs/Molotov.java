@@ -13,24 +13,29 @@ import pxp.engine.core.component.SpriteRenderer;
 import pxp.engine.core.component.pointer.PointerHandlerMouse;
 import pxp.engine.core.component.ui.Canvas;
 import pxp.engine.core.component.ui.Image;
-import pxp.engine.data.Color;
-import pxp.engine.data.Pivot;
-import pxp.engine.data.Vector2;
-import pxp.engine.data.Vector3;
+import pxp.engine.core.component.ui.Text;
+import pxp.engine.data.*;
 import pxp.engine.data.assets.AssetManager;
+import pxp.engine.data.assets.FontAsset;
 import pxp.engine.data.assets.SpriteAsset;
 import pxp.engine.data.ui.Anchor;
 import pxp.engine.data.ui.RenderMode;
+import pxp.logging.Debug;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Molotov extends GameObject {
     public static final float SIZE = 2.4f;
 
     private class MolotovHandler extends Component implements PointerHandlerMouse {
 
+        private boolean canContinue = false;
+
         @Override
         public void mouseClick(MouseEvent mouseEvent) {
             PlayerInventory.addItem(ItemRegistry.MOLOTOV.item);
-            this.gameObject.destroy();
+//            this.gameObject.destroy();
             ctx().runLater(this.gameObject, 2f, () -> {
 
                 ctx().getCurrentScene().addGameObject(new GameObject("blackCanvas", new Component[] {
@@ -48,15 +53,54 @@ public class Molotov extends GameObject {
                             new Vector2(1920, 1080),
                             Anchor.CENTER
                         );
+                    }},
+                    new GameObject("enter", new Component[] {
+                        new Text("Press ENTER") {{
+                            pivot = Pivot.CENTER;
+                            color = Color.white();
+                            fontSize = 16;
+                            font = AssetManager.get("PressStart", FontAsset.class);
+                        }}
+                    }) {{
+                        transform = new RectTransform(
+                            new Vector2(-100, -100),
+                            new Vector3(),
+                            new Vector2(1,1),
+                            new Vector2(-1f, -1f),
+                            Anchor.BOTTOM_RIGHT
+                        );
                     }}
                 }));
 
                 ctx().getCurrentScene().getGameObject("canvas").destroy();
 
                 ctx().runLater(this.gameObject, 1f, () -> {
-                    ctx().setScene(SceneIndex.MAP.index);
+//                    ctx().setScene(SceneIndex.MAP.index);
+                    this.canContinue = true;
                 });
             });
+        }
+        @Override
+        public void update() {
+            if (!this.canContinue) return;
+
+            if (Input.getKeyOnce(Key.ENTER)) {
+                getGameObjects(ctx().getCurrentScene().objects).forEach(o -> {
+                    if (o.isDestroyed)
+                        Debug.log(o.name);
+                });
+                ctx().setScene(SceneIndex.MAP.index);
+            }
+        }
+
+        private List<GameObject> getGameObjects(List<GameObject> gosI) {
+            List<GameObject> gos = new ArrayList<>();
+            gosI.forEach(o -> {
+                gos.add(o);
+                gos.addAll(getGameObjects(o.children));
+            });
+
+            return gos;
         }
 
         @Override

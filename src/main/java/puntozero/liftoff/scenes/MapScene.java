@@ -62,7 +62,7 @@ public class MapScene extends Scene
             // right top door
             () -> new Door(SceneIndex.STORAGE_ROOM.index, new Vector2(6.65f, -.95f), onClick(SceneIndex.STORAGE_ROOM.index)),
 
-            () -> new MapPlayer(new Vector2(1.2f,2f)),
+            () -> new MapPlayer(new Vector2(6.65f,-.5f)),
             () -> new GameObject("adult", new Component[] {
                 new SpriteRenderer(AssetManager.get("mapAdult", SpriteAsset.class)),
                 new AdultHandler(),
