@@ -35,8 +35,6 @@ public class Molotov extends GameObject {
 
         @Override
         public void mouseClick(MouseEvent mouseEvent) {
-            PlayerInventory.addItem(ItemRegistry.MOLOTOV.item);
-//            this.gameObject.destroy();
             ctx().runLater(this.gameObject, 2f, () -> {
 
                 ctx().getCurrentScene().addGameObject(new GameObject("blackCanvas", new Component[] {
@@ -80,6 +78,7 @@ public class Molotov extends GameObject {
                 ctx().runLater(this.gameObject, 1f, () -> {
 //                    ctx().setScene(SceneIndex.MAP.index);
                     this.canContinue = true;
+                    PlayerInventory.reset();
                 });
             });
         }

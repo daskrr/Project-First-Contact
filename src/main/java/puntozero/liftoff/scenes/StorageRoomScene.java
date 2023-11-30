@@ -34,7 +34,6 @@ import java.util.List;
 public class StorageRoomScene extends Scene {
     public static class StorageRoomSceneState implements SceneState {
         private boolean gameIntroFinished = false;
-        public boolean hasAllItems = false;
         public boolean allPotionsCollected = false;
         public boolean redPotion = false;
         public boolean greenPotion = false;
@@ -58,8 +57,7 @@ public class StorageRoomScene extends Scene {
                 add(PlayerInventory::create);
             }};
 
-            // TODO: uncomment this
-            if (!allPotionsCollected && gameIntroFinished /*&& hasAllItems*/) {
+            if (!allPotionsCollected) {
                 if (!greenPotion)
                     suppliers.add(() -> new Interactable("potionGreen",
                             new Vector2(),
@@ -126,36 +124,38 @@ public class StorageRoomScene extends Scene {
         return new PXPEvent() {
             @Override
             public void invoke() {
-                if (object.equals("potionRed")) {
-                    PlayerInventory.addItem(ItemRegistry.POTION_RED.item);
-                    state.redPotion = true;
-                }
-                else if (object.equals("potionBlue")) {
-                    PlayerInventory.addItem(ItemRegistry.POTION_BLUE.item);
-                    state.bluePotion = true;
-                }
-                else if (object.equals("potionGreen")) {
-                    PlayerInventory.addItem(ItemRegistry.POTION_GREEN.item);
-                    state.greenPotion = true;
-                }
+            if (object.equals("potionRed")) {
+                PlayerInventory.addItem(ItemRegistry.POTION_RED.item);
+                state.redPotion = true;
+            }
+            else if (object.equals("potionBlue")) {
+                PlayerInventory.addItem(ItemRegistry.POTION_BLUE.item);
+                state.bluePotion = true;
+            }
+            else if (object.equals("potionGreen")) {
+                PlayerInventory.addItem(ItemRegistry.POTION_GREEN.item);
+                state.greenPotion = true;
+            }
 
-                getGameObject(object).destroy();
+            getGameObject(object).destroy();
 
-                if (state.redPotion && state.greenPotion && state.bluePotion){
-                    TextBox textBox = new TextBox(
-                            "Time to make the bomb on the table.",
-                            17,
-                            new Vector2(600,200),
-                            new Color(30, 32, 36, 240),
-                            AssetManager.get("PressStart", FontAsset.class),
-                            Color.white(),
-                            new Vector2(550, -1)
-                    );
-                    addGameObject(textBox);
-                    textBox.remove(textShowTime);
+            //TODO: change this
+            //TODO: if all the items are collected then you get this message.
+            if (state.redPotion && state.greenPotion && state.bluePotion){
+//                TextBox textBox = new TextBox(
+//                        "Time to make the bomb on the table.",
+//                        17,
+//                        new Vector2(600,200),
+//                        new Color(30, 32, 36, 240),
+//                        AssetManager.get("PressStart", FontAsset.class),
+//                        Color.white(),
+//                        new Vector2(550, -1)
+//                );
+//                addGameObject(textBox);
+//                textBox.remove(textShowTime);
 
-                    state.allPotionsCollected = true;
-                }
+                state.allPotionsCollected = true;
+            }
             }
         };
     }
@@ -180,8 +180,7 @@ public class StorageRoomScene extends Scene {
             showIntroDialogue();
 
             LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
-            //TODO: player can't move while intro dialogue is showing (uncomment)
-            //levelPlayer.controller.setLocked(true);
+            levelPlayer.controller.setLocked(true);
         }
     }
 
@@ -189,8 +188,7 @@ public class StorageRoomScene extends Scene {
     protected void render() {
         super.render();
 
-        // TODO: uncomment this
-        if (state.allPotionsCollected && state.gameIntroFinished /*&& state.hasAllItems*/ && !state.craftingTable){
+        if (state.allPotionsCollected && state.gameIntroFinished && hasAllItems() && !state.craftingTable){
             Interactable in = new Interactable("craftingTable",
                     new Vector2(),
                     new Vector2(5f, 2.5f),
@@ -205,7 +203,7 @@ public class StorageRoomScene extends Scene {
         }
     }
 
-    private final float textShowTime = 3.5f;
+    private final float textShowTime = 5f;
     private void showIntroDialogue() {
         List<TextBox> texts = new ArrayList<>() {{
             add(new TextBox(
@@ -307,7 +305,7 @@ public class StorageRoomScene extends Scene {
                             getGameObject("bigNoteCanvas").destroy();
 
                             // show dialogue of missing part of note
-                            TextBox textBox = new TextBox(
+                            TextBox textBox1 = new TextBox(
                                     "Oh a part of the note is missing. I should go find the missing piece of information.",
                                     17,
                                     new Vector2(600,200),
@@ -316,11 +314,41 @@ public class StorageRoomScene extends Scene {
                                     Color.white(),
                                     new Vector2(550, -1)
                             );
-                            addGameObject(textBox);
-                            textBox.remove(textShowTime);
+                            addGameObject(textBox1);
+                            textBox1.remove(textShowTime);
 
-                            //TODO: player can move after the intro dialogue is over (uncomment)
-                            //levelPlayer.controller.setLocked(false);
+
+                            TextBox textBox2= new TextBox(
+                                    "To see your inventory press I. To take a look at the note again press N.",
+                                    17,
+                                    new Vector2(600,200),
+                                    new Color(30, 32, 36, 240),
+                                    AssetManager.get("PressStart", FontAsset.class),
+                                    Color.white(),
+                                    new Vector2(550, -1)
+                            );
+                            ctx().runLater(textBox2, textShowTime, () -> {
+                                addGameObject(textBox2);
+                                textBox2.remove(textShowTime);
+                            });
+
+                            TextBox textBox3= new TextBox(
+                                    "Use left click to move and right click to interact",
+                                    17,
+                                    new Vector2(600,200),
+                                    new Color(30, 32, 36, 240),
+                                    AssetManager.get("PressStart", FontAsset.class),
+                                    Color.white(),
+                                    new Vector2(550, -1)
+                            );
+                            ctx().runLater(textBox3, textShowTime*2, () -> {
+                                addGameObject(textBox3);
+                                textBox3.remove(textShowTime);
+
+
+                                LevelPlayer levelPlayer = (LevelPlayer) getGameObject("levelPlayer");
+                                levelPlayer.controller.setLocked(false);
+                            });
                         }
                     };
                     color = Color.white();
@@ -353,5 +381,14 @@ public class StorageRoomScene extends Scene {
                 );
             }}
         });
+    }
+
+    private boolean hasAllItems(){
+        if (PlayerInventory.hasItem("matchBox") &&
+            PlayerInventory.hasItem("pot") &&
+            PlayerInventory.hasItem("napkin")){
+            return true;
+        }
+        return false;
     }
 }

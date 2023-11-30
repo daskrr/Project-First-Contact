@@ -32,6 +32,9 @@ public class Matches extends GameObject {
                 PotionSlot.potions.get(1).type == Potion.Type.RED &&
                 PotionSlot.potions.get(2).type == Potion.Type.GREEN) {
                     ctx().getCurrentScene().addGameObject(new Molotov(new Vector2(0,0), new Vector2(1,1)));
+                    ctx().getCurrentScene().addGameObject(new GameObject("bombPot", new Component[] {
+                            new SpriteRenderer(AssetManager.get("pot", SpriteAsset.class))
+                    }));
                 }
                 else {
                     // if potion mix wasn't in the right order you die
