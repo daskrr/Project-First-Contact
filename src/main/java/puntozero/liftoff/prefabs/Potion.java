@@ -85,8 +85,22 @@ public class Potion extends GameObject
 
         private void checkPotions() {
             if (PotionSlot.potionsInPot > 0){
-//                this.gameObject.destroy();
                 this.gameObject.isActive = false;
+                if (PotionSlot.potions.getLast().type == Type.RED) {
+                    instantiate(new GameObject("potRed", new Component[] {
+                            new SpriteRenderer(AssetManager.get("redPot", SpriteAsset.class))
+                    }));
+                }
+                else if (PotionSlot.potions.getLast().type == Type.GREEN) {
+                    instantiate(new GameObject("potGreen", new Component[] {
+                            new SpriteRenderer(AssetManager.get("greenPot", SpriteAsset.class))
+                    }));
+                }
+                else if (PotionSlot.potions.getLast().type == Type.BLUE) {
+                    instantiate(new GameObject("potBlue", new Component[] {
+                            new SpriteRenderer(AssetManager.get("bluePot", SpriteAsset.class))
+                    }));
+                }
                 PotionSlot.potionsInPot = 0;
             }
             if (PotionSlot.correctPotions != 3) return;
