@@ -5,6 +5,7 @@ import puntozero.liftoff.inventory.InventoryItem;
 import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.manager.SoundManager;
 import puntozero.liftoff.prefabs.Monologue;
+import puntozero.liftoff.prefabs.TextBox;
 import puntozero.liftoff.prefabs.UIItem;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.GameProcess;
@@ -62,6 +63,27 @@ public class PlayerInventory extends Component
         Monologue monologue = new Monologue("Obtained 1x "+ item.humanName);
         GameProcess.getInstance().getCurrentScene().addGameObject(monologue);
         monologue.remove(1.5f);
+
+        if (
+            (hasItem("pot") && hasItem("napkin") && hasItem("matchBox")
+            && hasItem("potionBlue") && hasItem("potionRed") && hasItem("potionGreen"))
+            && (hasItem("bookGreen") || hasItem("bookPurple") || hasItem("bookPink") || hasItem("bookRed") || hasItem("bookOrange") || hasItem("bookBlue"))
+        ) {
+            Debug.log("works");
+            TextBox textBox = new TextBox(
+                "Time to make the bomb on the table in the storage room.",
+                17,
+                new Vector2(600,200),
+                new Color(30, 32, 36, 240),
+                AssetManager.get("PressStart", FontAsset.class),
+                Color.white(),
+                new Vector2(550, -1)
+            );
+            GameProcess.nextFrame(() -> GameProcess.nextFrame(() -> GameProcess.nextFrame(() -> GameProcess.nextFrame(() -> {
+                GameProcess.getInstance().getCurrentScene().addGameObject(textBox);
+                textBox.remove(5f);
+            }))));
+        }
 
         SoundManager.playSound("sound2");
     }

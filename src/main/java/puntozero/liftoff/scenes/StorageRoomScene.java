@@ -6,6 +6,7 @@ import puntozero.liftoff.data.SceneIndex;
 import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
+import puntozero.liftoff.manager.SoundManager;
 import puntozero.liftoff.prefabs.*;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.RectTransform;
@@ -124,38 +125,27 @@ public class StorageRoomScene extends Scene {
         return new PXPEvent() {
             @Override
             public void invoke() {
-            if (object.equals("potionRed")) {
-                PlayerInventory.addItem(ItemRegistry.POTION_RED.item);
-                state.redPotion = true;
-            }
-            else if (object.equals("potionBlue")) {
-                PlayerInventory.addItem(ItemRegistry.POTION_BLUE.item);
-                state.bluePotion = true;
-            }
-            else if (object.equals("potionGreen")) {
-                PlayerInventory.addItem(ItemRegistry.POTION_GREEN.item);
-                state.greenPotion = true;
-            }
+                if (object.equals("potionRed")) {
+                    PlayerInventory.addItem(ItemRegistry.POTION_RED.item);
+                    state.redPotion = true;
+                }
+                else if (object.equals("potionBlue")) {
+                    PlayerInventory.addItem(ItemRegistry.POTION_BLUE.item);
+                    state.bluePotion = true;
+                }
+                else if (object.equals("potionGreen")) {
+                    PlayerInventory.addItem(ItemRegistry.POTION_GREEN.item);
+                    state.greenPotion = true;
+                }
 
-            getGameObject(object).destroy();
+                getGameObject(object).destroy();
 
-            //TODO: change this
-            //TODO: if all the items are collected then you get this message.
-            if (state.redPotion && state.greenPotion && state.bluePotion){
-//                TextBox textBox = new TextBox(
-//                        "Time to make the bomb on the table.",
-//                        17,
-//                        new Vector2(600,200),
-//                        new Color(30, 32, 36, 240),
-//                        AssetManager.get("PressStart", FontAsset.class),
-//                        Color.white(),
-//                        new Vector2(550, -1)
-//                );
-//                addGameObject(textBox);
-//                textBox.remove(textShowTime);
+                //TODO: change this
+                //TODO: if all the items are collected then you get this message.
+                if (state.redPotion && state.greenPotion && state.bluePotion){
 
-                state.allPotionsCollected = true;
-            }
+                    state.allPotionsCollected = true;
+                }
             }
         };
     }
@@ -270,6 +260,7 @@ public class StorageRoomScene extends Scene {
             }
             else if (i+1 >= texts.size()){
                 this.context.runLater(t, i * textShowTime, () -> {
+                    SoundManager.playSound("sound1");
                     addGameObject(readNote());
                     state.gameIntroFinished = true;
                 });
