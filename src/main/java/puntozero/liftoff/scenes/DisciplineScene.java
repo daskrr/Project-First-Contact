@@ -4,10 +4,7 @@ import puntozero.liftoff.components.PlayerInventory;
 import puntozero.liftoff.inventory.ItemRegistry;
 import puntozero.liftoff.manager.SceneState;
 import puntozero.liftoff.manager.SceneStateManager;
-import puntozero.liftoff.prefabs.AdultDeath;
-import puntozero.liftoff.prefabs.Exit;
-import puntozero.liftoff.prefabs.Interactable;
-import puntozero.liftoff.prefabs.LevelPlayer;
+import puntozero.liftoff.prefabs.*;
 import pxp.engine.core.GameObject;
 import pxp.engine.core.Scene;
 import pxp.engine.core.Transform;
@@ -19,6 +16,7 @@ import pxp.engine.data.Color;
 import pxp.engine.data.GameObjectSupplier;
 import pxp.engine.data.Vector2;
 import pxp.engine.data.assets.AssetManager;
+import pxp.engine.data.assets.FontAsset;
 import pxp.engine.data.assets.SpriteAsset;
 import pxp.engine.data.event.PXPEvent;
 
@@ -99,5 +97,17 @@ public class DisciplineScene extends Scene {
         this.state = SceneStateManager.getInstance().get(this, new DisciplineSceneState());
         this.setGameObjects(state.restoreSceneState(this));
         super.load();
+
+        TextBox textBox1 = new TextBox(
+                "There are keys in the pocket of that jacket. Better get them quietly",
+                17,
+                new Vector2(600,200),
+                new Color(30, 32, 36, 240),
+                AssetManager.get("PressStart", FontAsset.class),
+                Color.white(),
+                new Vector2(550, -1)
+        );
+        addGameObject(textBox1);
+        textBox1.remove(5f);
     }
 }
